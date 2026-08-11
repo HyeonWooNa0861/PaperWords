@@ -23,7 +23,8 @@ export function AppShell({ children }: Readonly<{ children: ReactNode }>) {
       {children}
       <footer className="site-footer">
         <p>
-          PaperWords는 로컬에 검증된 공개 콘텐츠만 표시합니다. 논문 초록 전문은 저장하거나 재게시하지 않습니다.
+          PaperWords 사전 본문은 로컬 검증 콘텐츠만 사용합니다. 외부 탐색 후보는 분리 표시하며 논문 초록은
+          저장하거나 재게시하지 않습니다.
         </p>
       </footer>
     </div>

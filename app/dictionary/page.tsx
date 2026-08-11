@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ExternalDiscovery } from "@/components/ExternalDiscovery";
 import { SearchBox } from "@/components/SearchBox";
 import { SearchResults } from "@/components/SearchResults";
 import { buildSearchIndex, searchTerms } from "@/src/lib/search";
@@ -36,8 +37,25 @@ export default async function DictionaryPage({ searchParams }: DictionaryPagePro
       </header>
       <SearchBox defaultQuery={query} />
       <SearchResults lookups={makeContentLookups(registry)} response={response} />
+      <ExternalDiscovery initialQuery={externalInitialQuery(query, response.results[0]?.term.headword)} />
     </main>
   );
+}
+
+function externalInitialQuery(query: string, matchedHeadword: string | undefined): string {
+  const focusedQuery = new Map([
+    ["양자화", "Neural Network Quantization"],
+    ["엣지 컴퓨팅", "Edge Computing"]
+  ]).get(query.normalize("NFKC").trim());
+  if (focusedQuery) {
+    return focusedQuery;
+  }
+
+  if (/\p{Script=Hangul}/u.test(query) && matchedHeadword) {
+    return matchedHeadword;
+  }
+
+  return query.trim() || "edge computing";
 }
 
 function firstParam(value: string | string[] | undefined): string {

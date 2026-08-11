@@ -11,6 +11,7 @@ PaperWords uses a static-first Next.js App Router architecture.
 - `src/lib/search/`: bilingual normalization, MiniSearch candidate retrieval, and deterministic post-ranking.
 - `src/lib/schedule/`: Asia/Seoul date resolution and schedule selection.
 - `src/lib/pwa/`: service-worker registration, version state, and update behavior.
+- `src/lib/discovery/`: validated external-query boundary, CSO parser/search, Crossref metadata adapter, cache policy, and upstream error mapping.
 - `scripts/`: local validators and optional tooling-only metadata adapters.
 - `tests/` and `e2e/`: unit/component/integration and browser checks.
 
@@ -21,6 +22,7 @@ PaperWords uses a static-first Next.js App Router architecture.
 3. Search builds from the published registry and applies explicit match classes after MiniSearch candidate retrieval. Query normalization applies Unicode NFKC, ASCII case folding, separator convergence, Hangul preservation, and safe empty/unsupported/oversized states before candidate search.
 4. The daily resolver maps an Asia/Seoul date to one scheduled published term from the immutable `paperwords-mvp-2026-08-11.v1` local schedule.
 5. Route components join typed records to render terms, topics, papers, sources, and relation rationale.
+6. Only after an explicit browser action, same-origin `/api/discovery/*` routes fetch transient CSO or Crossref candidates. These responses never enter the published registry.
 
 ## Search And Schedule
 
@@ -31,7 +33,17 @@ PaperWords uses a static-first Next.js App Router architecture.
 
 ## Network Policy
 
-The app, build, and default tests must not require network or credentials. OpenAlex and Crossref may be added later only as opt-in tooling that writes unpublished candidate artifacts.
+The core app, build, and default tests do not require network or credentials. External discovery is optional and source-separated:
+
+- The browser calls only same-origin `/api/discovery/terms` and `/api/discovery/papers` routes.
+- CSO topic labels come from the public CSO 3.5 portal payload, are cached upstream for seven days, and link back to official CSO search pages. CSO is attributed as CC BY 4.0.
+- Crossref uses the anonymous public REST pool with no API key. Requests select bibliographic fields only, omit abstracts, are serialized within each server instance, and use one-hour upstream and CDN caching.
+- Crossref validates the response envelope and then validates items independently, so one malformed legacy record is dropped instead of disabling every candidate for the query. DOI links encode reserved path characters before rendering.
+- `PAPERWORDS_CROSSREF_MAILTO` is an optional contact address for Crossref's free polite pool; it is not required and is never returned to the browser.
+- `PAPERWORDS_EXTERNAL_DISCOVERY_ENABLED=0` disables both discovery routes with a no-store `503` before any upstream request. The default is enabled.
+- This remains a best-effort beta surface: public unique queries can spend host and upstream free-tier quota, Crossref serialization is only per server instance, and the CSO adapter intentionally fails closed if the current portal payload shape changes.
+- 400, 429, timeout, unavailable-source, and malformed-response states are explicit. A failed source does not hide results from the other source.
+- No candidate is persisted, indexed for SEO, scheduled, or automatically marked `published`.
 
 ## PWA Runtime
 
@@ -49,4 +61,5 @@ The app, build, and default tests must not require network or credentials. OpenA
 
 - `PAPERWORDS_SITE_URL` is the canonical deployment override. When it is unset or invalid, local builds use the deterministic default `http://localhost:3000`; the project does not claim an arbitrary production domain.
 - `app/sitemap.ts` and `app/robots.ts` derive from published local content only. The offline fallback route is noindexed and excluded from the sitemap.
+- Discovery API responses send `X-Robots-Tag: noindex, nofollow`; transient external candidates are absent from route metadata and structured data.
 - Term pages render escaped `DefinedTerm` JSON-LD and paper pages render minimal `ScholarlyArticle` JSON-LD from locally validated fields only. Paper JSON-LD intentionally omits abstract fields.

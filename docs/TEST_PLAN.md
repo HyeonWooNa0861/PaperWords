@@ -1,6 +1,6 @@
 # Test Plan
 
-Default tests are deterministic and network-independent.
+Default tests are deterministic and network-independent. External discovery adapters use mocked `fetch` responses in unit, route, component, and browser tests; only a separate production smoke check contacts live CSO and Crossref endpoints.
 
 ## Bootstrap Gate
 
@@ -59,6 +59,8 @@ Standalone browser scripts run a production build first, then start `next start`
 - Accessibility tests run axe against desktop and mobile routes and block release on critical or serious violations. They also cover keyboard-safe forms, live regions, language spans, and install controls.
 - SEO tests prove deterministic metadata, manifest, icon, robots, sitemap, published-only JSON-LD, no abstract body exposure, and no draft leakage.
 - JSON-LD unit coverage proves malicious script delimiters are escaped before serialization.
+- Discovery tests prove query limits, CSO payload parsing and focus ranking, seven-day/one-hour cache settings, Crossref field selection without abstracts, DOI gating and reserved-character encoding, per-item malformed-metadata isolation, 429 `Retry-After`, timeout and malformed-envelope mapping, the no-request rollback switch, explicit user activation, partial-source failure, and separate `external-unverified` rendering.
+- Browser discovery coverage fulfills same-origin API calls with deterministic fixtures, so the release gate never consumes a live public API quota.
 
 ## PWA and SEO Test Configuration
 

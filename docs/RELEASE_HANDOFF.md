@@ -1,8 +1,8 @@
 # Release Handoff
 
-Date: 2026-08-11 KST.
+Date: 2026-08-12 KST.
 
-This handoff records the final local release and review state for PaperWords G008. Claude, independent code-reviewer, architect, ai-slop-cleaner, and root verification results are complete and recorded below.
+This handoff records the PaperWords v0.2 release candidate: the verified local MVP plus free, source-separated open-network discovery. External candidates are intentionally not dictionary content.
 
 ## Product Scope
 
@@ -10,7 +10,7 @@ This handoff records the final local release and review state for PaperWords G00
 - The published corpus has 20 terms: 3 foundational terms, 8 edge-computing terms, and 9 neural-network-quantization terms.
 - The published registry has 19 papers, 28 sources, and 6 topics.
 - The immutable MVP schedule is `paperwords-mvp-2026-08-11.v1`, spans `2026-08-11` through `2026-11-08` KST, has 90 populated dates, and uses a 20-day no-repeat window.
-- Runtime, production build, and default verification do not require network access, credentials, external scholarly APIs, commits, pushes, deploys, or publishing authority.
+- Runtime startup, production build, and default verification do not require network access, credentials, or external scholarly APIs. Only an explicit user search contacts the live CSO and Crossref sources.
 
 ## Routes And Features
 
@@ -19,6 +19,8 @@ This handoff records the final local release and review state for PaperWords G00
 - `/terms/[slug]`: term detail pages with Korean explanation, related terms, source stamps, and paper relation rationale.
 - `/topics` and `/topics/[slug]`: topic browsing and topic-filtered published terms plus representative relation papers.
 - `/papers/[id]`: relation-only paper details; abstracts are not copied into the app.
+- `/api/discovery/terms`: server-only CSO term-candidate lookup, noindexed and CDN-cached.
+- `/api/discovery/papers`: server-only keyless Crossref bibliographic lookup, noindexed and CDN-cached; abstracts are never selected.
 - `/~offline`: direct offline fallback route, noindexed and excluded from sitemap.
 - `/manifest.webmanifest`, `/sw.js`, `/robots.txt`, and `/sitemap.xml`: local PWA and SEO routes derived from published content and deterministic metadata.
 
@@ -64,9 +66,18 @@ Useful focused checks:
 
 ## Production URL
 
-Set `PAPERWORDS_SITE_URL` to the production origin before a production build that will be deployed. The app uses that value for canonical URLs, Open Graph URLs, robots, sitemap, and JSON-LD. If it is unset or invalid, local builds fall back to `http://localhost:3000`; browser verification sets `PAPERWORDS_SITE_URL=http://127.0.0.1:<port>` through the Playwright launcher.
+Set `PAPERWORDS_SITE_URL` to the production origin when an explicit canonical override is needed. The app otherwise uses Vercel's `VERCEL_PROJECT_PRODUCTION_URL` in production and `http://localhost:3000` locally. Browser verification sets `PAPERWORDS_SITE_URL=http://127.0.0.1:<port>` through the Playwright launcher.
 
 Because `/sw.js` is a dynamic route that reads environment and optional version-file state per request, production deployment needs a Node-compatible Next.js server runtime such as `next start` or an equivalent server host. A pure static export is not a valid deployment target for the current PWA contract.
+
+## Free Open-Network Operations
+
+- The default runtime uses the public CSO portal and Crossref public REST pool. No paid API, API key, user account, or copied abstract is required.
+- `PAPERWORDS_EXTERNAL_DISCOVERY_ENABLED=0` is the immediate rollback switch. Both routes return a no-store `503` without contacting an upstream source.
+- `PAPERWORDS_CROSSREF_MAILTO` is an optional maintainer contact for Crossref's free polite pool. It is not a secret and is never sent to the browser.
+- Successful term responses use a one-day CDN cache and seven-day upstream revalidation directive. Successful paper responses use a one-hour CDN cache and one-hour upstream revalidation directive. Errors are no-store.
+- Treat this as best-effort beta. Unique public queries can consume host and upstream free-tier quota; Crossref concurrency-one serialization is per server instance, not global; CSO parsing depends on the current public portal payload and fails closed when that shape changes.
+- Live source smoke checks are separate from the offline release gate and should be kept sparse.
 
 ## PWA Version File
 
@@ -77,25 +88,23 @@ Because `/sw.js` is a dynamic route that reads environment and optional version-
 - Missing files, malformed JSON, non-object or array payloads, non-string values, and unknown keys make `/sw.js` return `500` with `X-PaperWords-Pwa-Version-File-Error: 1`.
 - Partial valid string files are allowed; omitted fields fall back to direct environment overrides or deterministic defaults.
 
-## Final Claude Read-Only Review
+## v0.2 Claude Read-Only Review
 
-- Artifact: `.omx/artifacts/claude-task-id-pw-g008-final-release-mode-read-only-goal-independen-2026-08-11T11-14-32-167Z.md`
+- Artifact: `.omx/artifacts/claude-task-id-pw-v020-final-mode-read-only-goal-independently-revi-2026-08-11T15-34-49-973Z.md`
 - Verdict: `APPROVE`.
-- Follow-up Claude call: unnecessary; the findings were non-blocking and could be dispositioned from current repo evidence.
+- Follow-up Claude call: unnecessary; all findings were low or advisory.
 - Finding disposition:
-  - Before-range and after-range Today fallback tests exist in `tests/routes/core-routes.test.tsx`.
-  - `src/lib/schedule/dates.ts` uses UTC milliseconds and ISO slicing for KST arithmetic, not local timezone getters.
-  - Dynamic port handling was fixed so `build:browser`, Playwright runtime, and SEO expected URLs follow `PAPERWORDS_PLAYWRIGHT_PORT`.
-  - PWA version-file scoping was fixed so only `test:pwa:run` sets `PAPERWORDS_PWA_VERSION_FILE`; non-PWA browser suites exercise `/sw.js` defaults.
-  - POSIX process-group behavior and the Node-compatible production runtime prerequisite are documented here.
+  - Crossref now validates items independently so one malformed legacy record is dropped without discarding the valid result set.
+  - DOI outbound links encode reserved characters such as `#`.
+  - CDN response caching remains the operational backstop; server data-cache behavior with a custom abort signal is not claimed as a production load guarantee.
+  - The bounded feature remains best-effort beta, with a documented no-code rollback switch. The per-instance Crossref queue is not presented as global rate limiting.
 
-## Final Independent Review And Verification
+## v0.2 Independent Review And Verification
 
-- ai-slop-cleaner: `CLEAN`.
-- Independent code-reviewer: `APPROVE`, 0 issues.
-- Architect: `CLEAR`, blocking 0. The architect proposed two documentation precision items, both reflected here: launcher cwd validation is package-name based, and final review and verification results are explicit.
-- Final root verification: `npm exec --offline --yes --package=pnpm@10.34.5 -- pnpm verify` passed.
-- Verification evidence: lockfile, lint, and typecheck passed; content 45, search 6, schedule 11, Vitest 77, production build 53 pages, E2E 14, PWA 10, a11y 18, and SEO 8 passed.
+- Independent code-reviewer: `APPROVE`; its only low finding was a duplicate `.gitignore` rule that overrode the `.env.example` exception. The duplicate rule was removed and a safe example file was added.
+- Architect: `WATCH`, blocking 0. The watch items are public unique-query free-tier cost, per-instance rather than global Crossref serialization, and CSO portal-shape dependence. Each is documented above; the rollback switch addresses emergency shutdown.
+- Final root verification: `npm exec --offline --yes --package=pnpm@10.34.5 -- pnpm verify` passed on 2026-08-12 KST.
+- Verification evidence: lockfile 22, lint, and typecheck passed; content 45, search 6, schedule 11, Vitest 98, production build 53 pages plus two dynamic discovery routes, E2E 16, PWA 10, a11y 18, and SEO 8 passed.
 - Final launcher cleanup: port `4311` has no listener; `output/playwright/web-server-4311.json` records `state: "exited"`, `event: "child-exited-after-stop"`, `stopReason: "SIGTERM"`, and `childExitCode: 143`.
 
 ## Generated Output
@@ -127,4 +136,4 @@ If local tooling prints the `NO_COLOR` and `FORCE_COLOR` environment warning whi
 
 ## Release Authority
 
-No commit, push, deploy, credential use, paid service use, external scholarly API use, or publication authority is granted for this handoff.
+This document does not grant standing publication authority. The current task has separate, explicit user authorization only for the public GitHub repository `HyeonWooNa0861/PaperWords` on remote `origin`, branch `main`, and Vercel project `sigebert111s-projects/paperwords` with production alias `https://paperwords.vercel.app`. Paid services remain out of scope.

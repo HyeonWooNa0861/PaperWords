@@ -106,6 +106,17 @@ describe("Dictionary route and search states", () => {
     expect(
       screen.getByRole("link", { name: /Retrieval-Augmented Generation RAG/i })
     ).toHaveAttribute("href", "/terms/retrieval-augmented-generation");
+    expect(screen.getByRole("searchbox", { name: "외부 검색어" })).toHaveValue("RAG");
+    expect(screen.getByText("미검증 후보")).toBeInTheDocument();
+  });
+
+  it("uses the top verified English headword for a Korean external-discovery handoff", async () => {
+    const ui = await DictionaryPage({ searchParams: Promise.resolve({ q: "양자화" }) });
+    render(ui);
+
+    expect(screen.getByRole("searchbox", { name: "외부 검색어" })).toHaveValue(
+      "Neural Network Quantization"
+    );
   });
 
   it("labels exact, Korean, prefix, fuzzy, and body matches", () => {

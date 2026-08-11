@@ -14,12 +14,17 @@ interface RouteMetadataOptions {
 export function getSiteBaseUrl(): URL {
   const configured = process.env.PAPERWORDS_SITE_URL?.trim() || process.env.NEXT_PUBLIC_PAPERWORDS_SITE_URL?.trim();
 
-  if (!configured) {
-    return new URL(DEFAULT_SITE_URL);
+  if (configured) {
+    return parseSiteUrl(configured);
   }
 
+  const vercelProductionHost = process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim();
+  return vercelProductionHost ? parseSiteUrl(`https://${vercelProductionHost}`) : new URL(DEFAULT_SITE_URL);
+}
+
+function parseSiteUrl(value: string): URL {
   try {
-    const parsed = new URL(configured);
+    const parsed = new URL(value);
     parsed.pathname = "";
     parsed.search = "";
     parsed.hash = "";

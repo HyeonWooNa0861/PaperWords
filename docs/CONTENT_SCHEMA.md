@@ -60,6 +60,10 @@ Offline validation proves workflow integrity, not factual truth. A published fie
 
 Human/source review establishes factual correctness. Tests only prove that the registry cannot publish content with missing source mappings or missing editorial attestations.
 
+## External Discovery Candidates
+
+CSO term candidates and Crossref paper candidates are transient API response records, not content-registry records. They always carry `verificationStatus: "external-unverified"`, are displayed in a separate UI region, and cannot satisfy any `published` schema requirement. Crossref candidates require a DOI and intentionally have no abstract field. Promoting a candidate requires the normal local authoring, source mapping, Korean explanation, editorial verification, and publication workflow.
+
 When official sources differ on display spelling for the same bibliographic field, the record chooses one canonical field owner rather than letting conflicting sources verify the same field. Each paper has exactly one chosen official metadata source that owns the `authors` field, and that same source must appear in the paper's `metadataSources` and editorial source checks. The initial three papers use arXiv for author display names; older or publisher-only papers may instead use a publisher, proceedings, DOI-registry source, or official institutional document as the canonical author source.
 
 ## Validation Rules

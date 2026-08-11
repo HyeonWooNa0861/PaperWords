@@ -20,13 +20,74 @@ test("bilingual dictionary submit opens a published result", async ({ page }) =>
   await page.goto("/dictionary");
 
   await page.getByRole("searchbox", { name: "논문 용어 검색" }).fill("양자화");
-  await page.getByRole("button", { name: "검색" }).click();
+  await page.getByRole("button", { name: "검색", exact: true }).click();
 
   await expect(page).toHaveURL(/\/dictionary\?q=/);
   await expect(page.getByText(/개 결과/)).toBeVisible();
   await page.getByRole("link", { name: /Quantization Calibration/i }).first().click();
   await expect(page).toHaveURL(/\/terms\/quantization-calibration$/);
   await expect(page.getByRole("heading", { name: /Quantization Calibration/i })).toBeVisible();
+});
+
+test("external discovery stays separate and renders mocked open-network candidates", async ({ page }) => {
+  await page.route("**/api/discovery/terms?**", async (route) => {
+    await route.fulfill({
+      contentType: "application/json",
+      body: JSON.stringify({
+        query: "neural network quantization",
+        source: {
+          id: "cso",
+          name: "Computer Science Ontology 3.5",
+          url: "https://cso.kmi.open.ac.uk/downloads",
+          licenseNote: "CC BY 4.0"
+        },
+        candidates: [
+          {
+            label: "quantized llms",
+            url: "https://cso.kmi.open.ac.uk/search.php?q=quantized+llms",
+            verificationStatus: "external-unverified"
+          }
+        ]
+      })
+    });
+  });
+  await page.route("**/api/discovery/papers?**", async (route) => {
+    await route.fulfill({
+      contentType: "application/json",
+      body: JSON.stringify({
+        query: "neural network quantization",
+        source: {
+          id: "crossref",
+          name: "Crossref REST API",
+          url: "https://www.crossref.org/documentation/retrieve-metadata/",
+          licenseNote: "public metadata"
+        },
+        candidates: [
+          {
+            doi: "10.1234/paperwords-e2e",
+            title: "Neural Network Quantization for Efficient Inference",
+            authors: ["Ada Lovelace"],
+            year: 2025,
+            url: "https://doi.org/10.1234/paperwords-e2e",
+            verificationStatus: "external-unverified"
+          }
+        ]
+      })
+    });
+  });
+
+  await page.goto("/dictionary?q=양자화");
+
+  await expect(page.getByRole("searchbox", { name: "외부 검색어" })).toHaveValue(
+    "Neural Network Quantization"
+  );
+  await expect(page.getByText("미검증 후보")).toBeVisible();
+  await page.getByRole("button", { name: "외부 데이터 검색" }).click();
+  await expect(page.getByRole("link", { name: "quantized llms" })).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Neural Network Quantization for Efficient Inference" })
+  ).toBeVisible();
+  await expectNoHorizontalOverflow(page);
 });
 
 test("term detail shows relations, sources, and deep refresh support", async ({ page }) => {
@@ -88,5 +149,5 @@ test("keyboard tab order reaches navigation and dictionary form controls", async
   await page.getByRole("searchbox", { name: "논문 용어 검색" }).focus();
   await expect(page.getByRole("searchbox", { name: "논문 용어 검색" })).toBeFocused();
   await page.keyboard.press("Tab");
-  await expect(page.getByRole("button", { name: "검색" })).toBeFocused();
+  await expect(page.getByRole("button", { name: "검색", exact: true })).toBeFocused();
 });

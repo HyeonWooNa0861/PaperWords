@@ -1,0 +1,17 @@
+.next/
+node_modules/
+output/
+.playwright-cli/
+.omx/
+.codex/
+.env*
+coverage/
+e2e/
+tests/
+docs/
+*.log
+*.tsbuildinfo
+playwright.config.ts
+vitest.config.ts
+AGENTS.md
+CLAUDE.md
