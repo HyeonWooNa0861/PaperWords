@@ -1,0 +1,32 @@
+# dependencies
+node_modules/
+
+# next.js
+.next/
+out/
+dist/
+
+# test and coverage output
+coverage/
+playwright-report/
+test-results/
+.vitest/
+output/
+.playwright-cli/
+
+# local orchestration runtime state
+.omx/state/
+.omx/tmux-hook.json
+
+# deployment provider state
+.vercel/
+
+# local env and secrets
+.env
+.env.*
+!.env.example
+
+# local/editor output
+.DS_Store
+*.log
+*.tsbuildinfo

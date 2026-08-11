@@ -1,0 +1,4 @@
+interface:
+  display_name: "PaperWords Term Authoring"
+  short_description: "Draft source-gated PaperWords term records"
+  default_prompt: "Use $paperwords-term-authoring to draft a source-gated PaperWords term for editorial review."

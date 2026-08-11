@@ -1,0 +1,518 @@
+[
+  {
+    "id": "english-exact-transformer",
+    "query": "Transformer",
+    "class": "english-exact",
+    "expectedTop1": "transformer",
+    "rationale": "canonical English headword"
+  },
+  {
+    "id": "english-exact-rag",
+    "query": "Retrieval-Augmented Generation",
+    "class": "english-exact",
+    "expectedTop1": "retrieval-augmented-generation",
+    "rationale": "hyphenated canonical English headword"
+  },
+  {
+    "id": "english-exact-diffusion-model",
+    "query": "Diffusion Model",
+    "class": "english-exact",
+    "expectedTop1": "diffusion-model",
+    "rationale": "canonical English headword"
+  },
+  {
+    "id": "english-exact-edge-computing",
+    "query": "Edge Computing",
+    "class": "english-exact",
+    "expectedTop1": "edge-computing",
+    "rationale": "canonical English headword"
+  },
+  {
+    "id": "english-exact-edge-ai",
+    "query": "Edge AI",
+    "class": "english-exact",
+    "expectedTop1": "edge-ai",
+    "rationale": "canonical English headword"
+  },
+  {
+    "id": "english-exact-mec",
+    "query": "Multi-access Edge Computing",
+    "class": "english-exact",
+    "expectedTop1": "multi-access-edge-computing",
+    "rationale": "canonical English headword"
+  },
+  {
+    "id": "english-exact-fog-computing",
+    "query": "Fog Computing",
+    "class": "english-exact",
+    "expectedTop1": "fog-computing",
+    "rationale": "canonical English headword"
+  },
+  {
+    "id": "english-exact-cloudlet",
+    "query": "Cloudlet",
+    "class": "english-exact",
+    "expectedTop1": "cloudlet",
+    "rationale": "canonical English headword"
+  },
+  {
+    "id": "english-exact-computation-offloading",
+    "query": "Computation Offloading",
+    "class": "english-exact",
+    "expectedTop1": "computation-offloading",
+    "rationale": "canonical English headword"
+  },
+  {
+    "id": "english-exact-federated-learning",
+    "query": "Federated Learning",
+    "class": "english-exact",
+    "expectedTop1": "federated-learning",
+    "rationale": "canonical English headword"
+  },
+  {
+    "id": "english-exact-on-device-inference",
+    "query": "On-device Inference",
+    "class": "english-exact",
+    "expectedTop1": "on-device-inference",
+    "rationale": "canonical English headword"
+  },
+  {
+    "id": "english-exact-neural-network-quantization",
+    "query": "Neural Network Quantization",
+    "class": "english-exact",
+    "expectedTop1": "neural-network-quantization",
+    "rationale": "canonical English headword"
+  },
+  {
+    "id": "english-exact-ptq",
+    "query": "Post-Training Quantization",
+    "class": "english-exact",
+    "expectedTop1": "post-training-quantization",
+    "rationale": "canonical English headword"
+  },
+  {
+    "id": "english-exact-qat",
+    "query": "Quantization-Aware Training",
+    "class": "english-exact",
+    "expectedTop1": "quantization-aware-training",
+    "rationale": "canonical English headword"
+  },
+  {
+    "id": "english-exact-mixed-precision",
+    "query": "Mixed-Precision Quantization",
+    "class": "english-exact",
+    "expectedTop1": "mixed-precision-quantization",
+    "rationale": "canonical English headword"
+  },
+  {
+    "id": "english-exact-weight-only",
+    "query": "Weight-Only Quantization",
+    "class": "english-exact",
+    "expectedTop1": "weight-only-quantization",
+    "rationale": "canonical English headword"
+  },
+  {
+    "id": "english-exact-activation",
+    "query": "Activation Quantization",
+    "class": "english-exact",
+    "expectedTop1": "activation-quantization",
+    "rationale": "canonical English headword"
+  },
+  {
+    "id": "english-exact-integer-only",
+    "query": "Integer-Only Inference",
+    "class": "english-exact",
+    "expectedTop1": "integer-only-inference",
+    "rationale": "canonical English headword"
+  },
+  {
+    "id": "english-exact-bnn",
+    "query": "Binary Neural Network",
+    "class": "english-exact",
+    "expectedTop1": "binary-neural-network",
+    "rationale": "canonical English headword"
+  },
+  {
+    "id": "english-exact-calibration",
+    "query": "Quantization Calibration",
+    "class": "english-exact",
+    "expectedTop1": "quantization-calibration",
+    "rationale": "canonical English headword"
+  },
+  {
+    "id": "korean-exact-transformer",
+    "query": "트랜스포머",
+    "class": "korean-exact",
+    "expectedTop1": "transformer",
+    "rationale": "canonical Korean equivalent"
+  },
+  {
+    "id": "korean-exact-rag",
+    "query": "검색 증강 생성",
+    "class": "korean-exact",
+    "expectedTop1": "retrieval-augmented-generation",
+    "rationale": "canonical Korean equivalent"
+  },
+  {
+    "id": "korean-exact-diffusion",
+    "query": "확산 모델",
+    "class": "korean-exact",
+    "expectedTop1": "diffusion-model",
+    "rationale": "canonical Korean equivalent"
+  },
+  {
+    "id": "korean-exact-edge-computing",
+    "query": "엣지 컴퓨팅",
+    "class": "korean-exact",
+    "expectedTop1": "edge-computing",
+    "rationale": "canonical Korean equivalent"
+  },
+  {
+    "id": "korean-exact-edge-ai",
+    "query": "엣지 AI",
+    "class": "korean-exact",
+    "expectedTop1": "edge-ai",
+    "rationale": "canonical Korean equivalent with ASCII fold"
+  },
+  {
+    "id": "korean-exact-mec",
+    "query": "멀티액세스 엣지 컴퓨팅",
+    "class": "korean-exact",
+    "expectedTop1": "multi-access-edge-computing",
+    "rationale": "canonical Korean equivalent"
+  },
+  {
+    "id": "korean-exact-fog",
+    "query": "포그 컴퓨팅",
+    "class": "korean-exact",
+    "expectedTop1": "fog-computing",
+    "rationale": "canonical Korean equivalent"
+  },
+  {
+    "id": "korean-exact-cloudlet",
+    "query": "클라우드렛",
+    "class": "korean-exact",
+    "expectedTop1": "cloudlet",
+    "rationale": "canonical Korean equivalent"
+  },
+  {
+    "id": "korean-exact-offloading",
+    "query": "계산 오프로딩",
+    "class": "korean-exact",
+    "expectedTop1": "computation-offloading",
+    "rationale": "canonical Korean equivalent"
+  },
+  {
+    "id": "korean-exact-federated",
+    "query": "연합 학습",
+    "class": "korean-exact",
+    "expectedTop1": "federated-learning",
+    "rationale": "canonical Korean equivalent"
+  },
+  {
+    "id": "korean-exact-on-device",
+    "query": "온디바이스 추론",
+    "class": "korean-exact",
+    "expectedTop1": "on-device-inference",
+    "rationale": "canonical Korean equivalent"
+  },
+  {
+    "id": "korean-exact-neural-quant",
+    "query": "신경망 양자화",
+    "class": "korean-exact",
+    "expectedTop1": "neural-network-quantization",
+    "rationale": "canonical Korean equivalent"
+  },
+  {
+    "id": "korean-exact-ptq",
+    "query": "훈련 후 양자화",
+    "class": "korean-exact",
+    "expectedTop1": "post-training-quantization",
+    "rationale": "canonical Korean equivalent"
+  },
+  {
+    "id": "korean-exact-qat",
+    "query": "양자화 인지 학습",
+    "class": "korean-exact",
+    "expectedTop1": "quantization-aware-training",
+    "rationale": "canonical Korean equivalent"
+  },
+  {
+    "id": "korean-exact-mixed",
+    "query": "혼합 정밀도 양자화",
+    "class": "korean-exact",
+    "expectedTop1": "mixed-precision-quantization",
+    "rationale": "canonical Korean equivalent"
+  },
+  {
+    "id": "korean-exact-weight-only",
+    "query": "가중치 전용 양자화",
+    "class": "korean-exact",
+    "expectedTop1": "weight-only-quantization",
+    "rationale": "canonical Korean equivalent"
+  },
+  {
+    "id": "korean-exact-activation",
+    "query": "활성값 양자화",
+    "class": "korean-exact",
+    "expectedTop1": "activation-quantization",
+    "rationale": "canonical Korean equivalent"
+  },
+  {
+    "id": "korean-exact-integer-only",
+    "query": "정수 전용 추론",
+    "class": "korean-exact",
+    "expectedTop1": "integer-only-inference",
+    "rationale": "canonical Korean equivalent"
+  },
+  {
+    "id": "korean-exact-bnn",
+    "query": "이진 신경망",
+    "class": "korean-exact",
+    "expectedTop1": "binary-neural-network",
+    "rationale": "canonical Korean equivalent"
+  },
+  {
+    "id": "korean-exact-calibration",
+    "query": "양자화 보정",
+    "class": "korean-exact",
+    "expectedTop1": "quantization-calibration",
+    "rationale": "canonical Korean equivalent"
+  },
+  {
+    "id": "acronym-rag",
+    "query": "RAG",
+    "class": "acronym-exact",
+    "expectedTop1": "retrieval-augmented-generation",
+    "rationale": "canonical acronym"
+  },
+  {
+    "id": "punctuation-rag",
+    "query": "R.A.G.",
+    "class": "punctuation-normalized-acronym",
+    "expectedTop1": "retrieval-augmented-generation",
+    "rationale": "dotted acronym converges to RAG"
+  },
+  {
+    "id": "acronym-mec",
+    "query": "MEC",
+    "class": "acronym-exact",
+    "expectedTop1": "multi-access-edge-computing",
+    "rationale": "canonical acronym"
+  },
+  {
+    "id": "punctuation-mec",
+    "query": "M.E.C.",
+    "class": "punctuation-normalized-acronym",
+    "expectedTop1": "multi-access-edge-computing",
+    "rationale": "dotted acronym converges to MEC"
+  },
+  {
+    "id": "acronym-ptq",
+    "query": "PTQ",
+    "class": "acronym-exact",
+    "expectedTop1": "post-training-quantization",
+    "rationale": "canonical acronym"
+  },
+  {
+    "id": "punctuation-ptq",
+    "query": "P.T.Q.",
+    "class": "punctuation-normalized-acronym",
+    "expectedTop1": "post-training-quantization",
+    "rationale": "dotted acronym converges to PTQ"
+  },
+  {
+    "id": "acronym-qat",
+    "query": "QAT",
+    "class": "acronym-exact",
+    "expectedTop1": "quantization-aware-training",
+    "rationale": "canonical acronym"
+  },
+  {
+    "id": "punctuation-qat",
+    "query": "Q.A.T.",
+    "class": "punctuation-normalized-acronym",
+    "expectedTop1": "quantization-aware-training",
+    "rationale": "dotted acronym converges to QAT"
+  },
+  {
+    "id": "acronym-bnn",
+    "query": "BNN",
+    "class": "acronym-exact",
+    "expectedTop1": "binary-neural-network",
+    "rationale": "canonical acronym"
+  },
+  {
+    "id": "punctuation-bnn",
+    "query": "B.N.N.",
+    "class": "punctuation-normalized-acronym",
+    "expectedTop1": "binary-neural-network",
+    "rationale": "dotted acronym converges to BNN"
+  },
+  {
+    "id": "alias-edge-intelligence",
+    "query": "Edge Intelligence",
+    "class": "alias-exact",
+    "expectedTop1": "edge-ai",
+    "rationale": "source-backed English alias"
+  },
+  {
+    "id": "alias-mobile-edge-computing",
+    "query": "Mobile Edge Computing",
+    "class": "alias-exact",
+    "expectedTop1": "multi-access-edge-computing",
+    "rationale": "source-backed English alias"
+  },
+  {
+    "id": "alias-denoising-diffusion",
+    "query": "Denoising Diffusion Model",
+    "class": "alias-exact",
+    "expectedTop1": "diffusion-model",
+    "rationale": "source-backed English alias"
+  },
+  {
+    "id": "alias-model-quantization",
+    "query": "model quantization",
+    "class": "alias-exact",
+    "expectedTop1": "neural-network-quantization",
+    "rationale": "alias outranks matching topic labels"
+  },
+  {
+    "id": "alias-binarized-neural-network",
+    "query": "Binarized Neural Network",
+    "class": "alias-exact",
+    "expectedTop1": "binary-neural-network",
+    "rationale": "source-backed English alias"
+  },
+  {
+    "id": "english-prefix-edge-comp",
+    "query": "Edge Comp",
+    "class": "english-prefix",
+    "expectedTop1": "edge-computing",
+    "rationale": "headword prefix outranks topic/body matches"
+  },
+  {
+    "id": "english-prefix-quantization-aware",
+    "query": "Quantization Awa",
+    "class": "english-prefix",
+    "expectedTop1": "quantization-aware-training",
+    "rationale": "headword prefix"
+  },
+  {
+    "id": "korean-prefix-calibration",
+    "query": "양자화 보",
+    "class": "korean-prefix",
+    "expectedTop1": "quantization-calibration",
+    "rationale": "Korean equivalent prefix"
+  },
+  {
+    "id": "korean-prefix-on-device",
+    "query": "온디바이스",
+    "class": "korean-prefix",
+    "expectedTop1": "on-device-inference",
+    "rationale": "Korean equivalent prefix"
+  },
+  {
+    "id": "hyphen-space-variation-rag",
+    "query": "retrieval augmented generation",
+    "class": "hyphen-space-variation",
+    "expectedTop1": "retrieval-augmented-generation",
+    "rationale": "hyphen and space forms converge"
+  },
+  {
+    "id": "hyphen-space-variation-weight-only",
+    "query": "Weight Only Quantization",
+    "class": "hyphen-space-variation",
+    "expectedTop1": "weight-only-quantization",
+    "rationale": "hyphen and space forms converge"
+  },
+  {
+    "id": "unicode-fullwidth-rag",
+    "query": "ＲＡＧ",
+    "class": "unicode-compatibility",
+    "expectedTop1": "retrieval-augmented-generation",
+    "rationale": "NFKC converts fullwidth acronym"
+  },
+  {
+    "id": "unicode-fullwidth-edge-ai",
+    "query": "Ｅｄｇｅ　ＡＩ",
+    "class": "unicode-compatibility",
+    "expectedTop1": "edge-ai",
+    "rationale": "NFKC converts fullwidth Latin and space"
+  },
+  {
+    "id": "unicode-fullwidth-ptq",
+    "query": "ＰＴＱ",
+    "class": "unicode-compatibility",
+    "expectedTop1": "post-training-quantization",
+    "rationale": "NFKC converts fullwidth acronym"
+  },
+  {
+    "id": "fuzzy-transformer",
+    "query": "Transformr",
+    "class": "bounded-typo-fuzzy",
+    "expectedTop1": "transformer",
+    "rationale": "one-character typo within bounded fuzzy distance"
+  },
+  {
+    "id": "fuzzy-calibration",
+    "query": "Quantizaton Calibration",
+    "class": "bounded-typo-fuzzy",
+    "expectedTop1": "quantization-calibration",
+    "rationale": "one missing character in long English headword"
+  },
+  {
+    "id": "fuzzy-federated",
+    "query": "Federated Learnng",
+    "class": "bounded-typo-fuzzy",
+    "expectedTop1": "federated-learning",
+    "rationale": "one missing character in English headword"
+  },
+  {
+    "id": "body-discovery-attention",
+    "query": "문맥 관계를",
+    "class": "body",
+    "expectedTop3": ["transformer"],
+    "rationale": "body text may support discovery but remains below exact classes"
+  },
+  {
+    "id": "no-result-supported",
+    "query": "zzzz no match",
+    "class": "no-result",
+    "expectedTop3": [],
+    "expectedStatus": "ready",
+    "rationale": "supported characters but no matching local record"
+  },
+  {
+    "id": "empty-query",
+    "query": "",
+    "class": "empty",
+    "expectedTop3": [],
+    "expectedStatus": "empty",
+    "rationale": "empty input is safe"
+  },
+  {
+    "id": "malformed-punctuation-only",
+    "query": "!!! --- ...",
+    "class": "malformed-query",
+    "expectedTop3": [],
+    "expectedStatus": "unsupported",
+    "rationale": "punctuation-only input is safe"
+  },
+  {
+    "id": "unsupported-script-only",
+    "query": "東京",
+    "class": "unsupported-script",
+    "expectedTop3": [],
+    "expectedStatus": "unsupported",
+    "rationale": "unsupported-script-only input is safe"
+  },
+  {
+    "id": "oversized-query",
+    "query": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "class": "oversized-query",
+    "expectedTop3": [],
+    "expectedStatus": "oversized",
+    "rationale": "oversized input is rejected before search"
+  }
+]

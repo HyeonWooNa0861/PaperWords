@@ -1,0 +1,59 @@
+{
+  "name": "paperwords",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.34.5",
+  "engines": {
+    "node": ">=22.11.0"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "build:browser": "PAPERWORDS_SITE_URL=http://127.0.0.1:${PAPERWORDS_PLAYWRIGHT_PORT:-4311} next build",
+    "start": "next start",
+    "lint": "eslint . --max-warnings=0",
+    "typecheck": "tsc --noEmit",
+    "test:content": "vitest run tests/content",
+    "test:search": "vitest run tests/search",
+    "test:schedule": "vitest run tests/schedule",
+    "test": "vitest run",
+    "test:e2e": "pnpm build:browser && pnpm test:e2e:run",
+    "test:e2e:run": "playwright test --project=e2e-desktop --project=e2e-mobile",
+    "test:pwa": "pnpm build:browser && pnpm test:pwa:run",
+    "test:pwa:run": "PAPERWORDS_PWA_VERSION_FILE=output/playwright/pwa-version.json playwright test --project=pwa",
+    "test:a11y": "pnpm build:browser && pnpm test:a11y:run",
+    "test:a11y:run": "playwright test --project=a11y-desktop --project=a11y-mobile",
+    "test:seo": "pnpm build:browser && pnpm test:seo:run",
+    "test:seo:run": "playwright test --project=seo",
+    "verify:lockfile": "node scripts/verify-lockfile.mjs",
+    "verify:bootstrap": "pnpm verify:lockfile && pnpm lint && pnpm typecheck && pnpm test:content && pnpm test && pnpm build",
+    "verify": "pnpm verify:lockfile && pnpm lint && pnpm typecheck && pnpm test:content && pnpm test:search && pnpm test:schedule && pnpm test && pnpm build:browser && pnpm test:e2e:run && pnpm test:pwa:run && pnpm test:a11y:run && pnpm test:seo:run"
+  },
+  "dependencies": {
+    "minisearch": "7.2.0",
+    "next": "16.3.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.12.1",
+    "@playwright/test": "1.62.1",
+    "@tailwindcss/postcss": "4.3.3",
+    "@testing-library/dom": "10.4.1",
+    "@testing-library/jest-dom": "7.0.1",
+    "@testing-library/react": "16.3.2",
+    "@types/node": "22.20.1",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.4",
+    "@vitejs/plugin-react": "4.7.0",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.3.0",
+    "jsdom": "26.1.0",
+    "tailwindcss": "4.3.3",
+    "typescript": "6.0.3",
+    "vite": "6.4.3",
+    "vitest": "4.1.10"
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "aiSlopCleaner": {
+    "status": "passed",
+    "evidence": "Final read-only ai-slop-cleaner audit returned CLEAN with 0 findings after inspecting the G008 launcher, Playwright/PWA/SEO tests, package scripts, route tests, and release docs; node --check, lint, typecheck, and 13 targeted Vitest cases passed."
+  },
+  "verification": {
+    "status": "passed",
+    "commands": [
+      "npm exec --offline --yes --package=pnpm@10.34.5 -- pnpm verify",
+      "env -u PAPERWORDS_PWA_VERSION_FILE PAPERWORDS_PLAYWRIGHT_PORT=4315 npm exec --offline --yes --package=pnpm@10.34.5 -- pnpm test:seo",
+      "PAPERWORDS_PLAYWRIGHT_PORT=4315 npm exec --offline --yes --package=pnpm@10.34.5 -- pnpm test:pwa"
+    ],
+    "evidence": "Post-cleaner root verification passed: lockfile, lint, typecheck, content 45, search 6, schedule 11, Vitest 77, production build 53 pages, E2E 14, PWA 10, a11y 18, and SEO 8. Selected-port 4315 SEO 8 and PWA 10 passed. The repaired launcher also passed a controlled Ctrl-C interruption with no manual kill or remaining listener, followed by a clean 10-test PWA rerun; final ports 4311 and 4315 were empty."
+  },
+  "codeReview": {
+    "recommendation": "APPROVE",
+    "architectStatus": "CLEAR",
+    "evidence": "Final independent code review reported 0 issues and APPROVE; final architecture review reported no blocking architecture defect and CLEAR. Both reviewers rechecked the final documentation-only precision fixes and retained APPROVE/CLEAR.",
+    "independentReview": {
+      "codeReviewer": {
+        "agentRole": "code-reviewer",
+        "evidence": "/root/paperwords_g008_final_code_review reviewed the release candidate, ran lockfile/lint/typecheck/content/search/schedule/Vitest checks, found 0 issues, returned APPROVE, and reconfirmed APPROVE after the final docs update."
+      },
+      "architect": {
+        "agentRole": "architect",
+        "evidence": "/root/paperwords_g008_final_architecture_review checked the static-first, publication, search, schedule, PWA, launcher, and deployment boundaries, found no blocker, returned CLEAR, and reconfirmed CLEAR after both LOW documentation precision findings were fixed."
+      }
+    }
+  },
+  "architectureInvariantGate": {
+    "status": "passed",
+    "sourceArtifacts": [
+      ".omx/ultragoal/brief.md",
+      ".omx/ultragoal/goals.json"
+    ],
+    "evidence": "The final architect review and fresh verification proved the original PaperWords brief constraints without blockers or scope expansion.",
+    "invariants": [
+      {
+        "invariant": "Runtime, build, and default tests are network-independent.",
+        "source": ".omx/ultragoal/brief.md#paperwords-mvp-ultragoal-execution-brief",
+        "status": "proved",
+        "implementationEvidence": "Published content, search, schedule, routes, service worker, and metadata are local; external scholarly services are not runtime or build dependencies, and Playwright blocks external HTTP requests.",
+        "testEvidence": "The pinned offline pnpm release gate passed all unit, build, browser, PWA, accessibility, and SEO checks without credentials or external APIs.",
+        "reviewEvidence": "The final code-reviewer returned APPROVE and the architect returned CLEAR for the local static-first/network-independent boundary."
+      },
+      {
+        "invariant": "Do not use credentials, paid services, commit, push, deploy, or publish externally.",
+        "source": ".omx/ultragoal/brief.md#paperwords-mvp-ultragoal-execution-brief",
+        "status": "proved",
+        "implementationEvidence": "All work remained in the local uncommitted PaperWords workspace; release documentation explicitly records that no commit, push, deploy, credentials, paid services, external API calls, or publication authority were used.",
+        "testEvidence": "Local verification and read-only advisor/reviewer workflows completed without any external production mutation.",
+        "reviewEvidence": "Claude remained a read-only advisor, and both final independent reviewers confirmed the release-authority boundary."
+      },
+      {
+        "invariant": "Preserve the fully populated 90-day KST schedule with its versioned 20-day no-repeat window.",
+        "source": ".omx/ultragoal/brief.md#paperwords-mvp-ultragoal-execution-brief",
+        "status": "proved",
+        "implementationEvidence": "content/schedule.ts retains immutable schedule paperwords-mvp-2026-08-11.v1 from 2026-08-11 through 2026-11-08 with 90 entries and a 20-day no-repeat window; UTC-based helpers resolve KST independently of host timezone.",
+        "testEvidence": "Schedule validation passed 11 tests covering duration, sequence, publication, repeat window, topic balance, and KST boundaries; Today route tests cover before-range and after-range stable fallbacks.",
+        "reviewEvidence": "Claude and the final architect independently confirmed the schedule arithmetic and immutable-window contract."
+      },
+      {
+        "invariant": "Preserve the provenance-versus-truth boundary.",
+        "source": ".omx/ultragoal/brief.md#paperwords-mvp-ultragoal-execution-brief",
+        "status": "proved",
+        "implementationEvidence": "Content validation enforces declared sources, same-source field support and editorial attestation, symmetric term-paper relations, publication states, and no copied abstract bodies while documentation states that validators prove workflow integrity rather than factual truth.",
+        "testEvidence": "Content validation passed 45 tests and the production registry contains 20 published terms, 19 papers, 28 sources, and 6 topics with publication and provenance gates intact.",
+        "reviewEvidence": "The final code-reviewer and architect both confirmed the published-only and source-gated boundary with no findings."
+      }
+    ]
+  }
+}
