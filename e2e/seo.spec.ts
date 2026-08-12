@@ -78,8 +78,8 @@ test("manifest, icon responses, robots, and sitemap are deterministic", async ({
     short_name: "PaperWords",
     start_url: "/",
     display: "standalone",
-    theme_color: "#171a17",
-    background_color: "#f6f7f0",
+    theme_color: "#f5f5f7",
+    background_color: "#f5f5f7",
     lang: "ko"
   });
   expect(manifest.icons).toEqual(

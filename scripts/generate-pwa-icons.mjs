@@ -7,63 +7,59 @@ const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const outputDir = join(root, "public", "icons");
 
 const palette = {
-  ink: [23, 26, 23, 255],
-  paper: [246, 247, 240, 255],
-  edge: [15, 127, 134, 255],
-  quant: [159, 29, 52, 255],
+  canvas: [245, 245, 247, 255],
+  blue: [0, 113, 227, 255],
   white: [255, 255, 255, 255]
 };
 
 await Promise.all([
-  writeIcon("icon-192.png", 192, 0.12),
-  writeIcon("icon-512.png", 512, 0.12),
-  writeIcon("maskable-512.png", 512, 0.22)
+  writeIcon("icon-192.png", 192, 0.06),
+  writeIcon("icon-512.png", 512, 0.06),
+  writeIcon("maskable-512.png", 512, 0.18)
 ]);
 
 async function writeIcon(fileName, size, paddingRatio) {
   const pixels = new Uint8Array(size * size * 4);
-  fillRect(pixels, size, 0, 0, size, size, palette.ink);
+  fillRect(pixels, size, 0, 0, size, size, palette.canvas);
 
   const pad = Math.round(size * paddingRatio);
-  fillRect(pixels, size, pad, pad, size - pad * 2, size - pad * 2, palette.paper);
+  const surfaceSize = size - pad * 2;
+  fillRoundedRect(
+    pixels,
+    size,
+    pad,
+    pad,
+    surfaceSize,
+    surfaceSize,
+    surfaceSize * 0.24,
+    palette.blue
+  );
 
-  const railWidth = Math.max(6, Math.round(size * 0.045));
-  fillRect(pixels, size, pad, pad, railWidth, size - pad * 2, palette.edge);
-  fillRect(pixels, size, size - pad - railWidth, pad, railWidth, size - pad * 2, palette.quant);
-
-  const scale = size / 512;
-  drawP(pixels, size, scale, palette.ink);
-  drawW(pixels, size, scale, palette.ink);
+  drawMonogram(pixels, size, pad, surfaceSize, palette.white);
 
   await writeFile(join(outputDir, fileName), encodePng(size, size, pixels));
 }
 
-function drawP(pixels, size, scale, color) {
-  const x = 142 * scale;
-  const y = 148 * scale;
-  const stem = 42 * scale;
-  const width = 116 * scale;
-  const top = 42 * scale;
-  const middle = 38 * scale;
+function drawMonogram(pixels, size, pad, surfaceSize, color) {
+  const glyphHeight = surfaceSize * 0.4;
+  const stroke = surfaceSize * 0.072;
+  const gap = surfaceSize * 0.075;
+  const pWidth = surfaceSize * 0.235;
+  const wWidth = surfaceSize * 0.31;
+  const totalWidth = pWidth + gap + wWidth;
+  const x = pad + (surfaceSize - totalWidth) / 2;
+  const y = pad + (surfaceSize - glyphHeight) / 2;
 
-  fillRect(pixels, size, x, y, stem, 216 * scale, color);
-  fillRect(pixels, size, x, y, width, top, color);
-  fillRect(pixels, size, x + width - stem, y, stem, 120 * scale, color);
-  fillRect(pixels, size, x, y + 104 * scale, width, middle, color);
-}
+  fillRect(pixels, size, x, y, stroke, glyphHeight, color);
+  fillRect(pixels, size, x, y, pWidth, stroke, color);
+  fillRect(pixels, size, x + pWidth - stroke, y, stroke, glyphHeight * 0.56, color);
+  fillRect(pixels, size, x, y + glyphHeight * 0.48, pWidth, stroke, color);
 
-function drawW(pixels, size, scale, color) {
-  const y = 148 * scale;
-  const left = 274 * scale;
-  const stroke = 38 * scale;
-  const height = 216 * scale;
-  const depth = 58 * scale;
-
-  fillRect(pixels, size, left, y, stroke, height, color);
-  fillRect(pixels, size, left + 62 * scale, y + depth, stroke, height - depth, color);
-  fillRect(pixels, size, left + 124 * scale, y, stroke, height, color);
-  fillRect(pixels, size, left + 32 * scale, y + height - stroke, 70 * scale, stroke, color);
-  fillRect(pixels, size, left + 94 * scale, y + height - stroke, 68 * scale, stroke, color);
+  const wX = x + pWidth + gap;
+  fillRect(pixels, size, wX, y, stroke, glyphHeight, color);
+  fillRect(pixels, size, wX + wWidth - stroke, y, stroke, glyphHeight, color);
+  fillRect(pixels, size, wX + (wWidth - stroke) / 2, y + glyphHeight * 0.34, stroke, glyphHeight * 0.66, color);
+  fillRect(pixels, size, wX, y + glyphHeight - stroke, wWidth, stroke, color);
 }
 
 function fillRect(pixels, size, x, y, width, height, color) {
@@ -79,6 +75,36 @@ function fillRect(pixels, size, x, y, width, height, color) {
       pixels[index + 1] = color[1];
       pixels[index + 2] = color[2];
       pixels[index + 3] = color[3];
+    }
+  }
+}
+
+function fillRoundedRect(pixels, size, x, y, width, height, radius, color) {
+  const x0 = clamp(Math.round(x), 0, size);
+  const y0 = clamp(Math.round(y), 0, size);
+  const x1 = clamp(Math.round(x + width), 0, size);
+  const y1 = clamp(Math.round(y + height), 0, size);
+  const roundedRadius = Math.min(radius, width / 2, height / 2);
+  const leftCenter = x + roundedRadius;
+  const rightCenter = x + width - roundedRadius;
+  const topCenter = y + roundedRadius;
+  const bottomCenter = y + height - roundedRadius;
+
+  for (let row = y0; row < y1; row += 1) {
+    for (let col = x0; col < x1; col += 1) {
+      const pointX = col + 0.5;
+      const pointY = row + 0.5;
+      const nearestX = clamp(pointX, leftCenter, rightCenter);
+      const nearestY = clamp(pointY, topCenter, bottomCenter);
+      const distance = Math.hypot(pointX - nearestX, pointY - nearestY);
+
+      if (distance <= roundedRadius) {
+        const index = (row * size + col) * 4;
+        pixels[index] = color[0];
+        pixels[index + 1] = color[1];
+        pixels[index + 2] = color[2];
+        pixels[index + 3] = color[3];
+      }
     }
   }
 }

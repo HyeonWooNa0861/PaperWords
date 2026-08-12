@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { AppShell } from "@/components/AppShell";
 import { createRouteMetadata, getSiteBaseUrl } from "./seo";
@@ -20,6 +20,11 @@ export const metadata: Metadata = {
     ],
     apple: [{ url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" }]
   }
+};
+
+export const viewport: Viewport = {
+  colorScheme: "light",
+  themeColor: "#f5f5f7"
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {

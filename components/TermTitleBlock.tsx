@@ -24,7 +24,10 @@ export function TermTitleBlock({
 
   return (
     <header className="term-title relation-rail" data-tone={getTermTone(term)}>
-      <p className="eyebrow">{eyebrow}</p>
+      <div className="term-title__meta">
+        <p className="eyebrow">{eyebrow}</p>
+        <span className="trust-label">검증됨</span>
+      </div>
       <h1 className="term-title__heading" id={headingId}>
         {title}
       </h1>

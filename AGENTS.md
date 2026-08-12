@@ -2,7 +2,7 @@
 
 ## Source Of Truth
 
-- Start with `docs/SPEC.md`, `docs/ARCHITECTURE.md`, `docs/CONTENT_SCHEMA.md`, `docs/TEST_PLAN.md`, and the ADRs in `docs/decisions/`.
+- Start with `docs/SPEC.md`, `docs/ARCHITECTURE.md`, `docs/CONTENT_SCHEMA.md`, `docs/TEST_PLAN.md`, `DESIGN.md`, and the ADRs in `docs/decisions/`.
 - Implementation agents do not manually edit `.omx` state or plan files. The Codex leader may update or checkpoint OMX-managed state through the authorized workflow/CLI and must preserve approved planning inputs.
 - Preserve `/Users/nahw/Documents/.LLM-Wiki/projects/PaperWords/**` session records unless the user explicitly asks for handoff updates.
 

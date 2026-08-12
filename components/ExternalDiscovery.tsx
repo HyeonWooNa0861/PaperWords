@@ -70,7 +70,7 @@ export function ExternalDiscovery({ initialQuery = "edge computing" }: ExternalD
         Crossref에 서버를 통해 연결하며, 후보는 자동으로 PaperWords 용어가 되지 않습니다.
       </p>
 
-      <form className="external-search" onSubmit={handleSubmit} role="search">
+      <form aria-busy={loading} className="external-search" onSubmit={handleSubmit} role="search">
         <label className="search-box__label" htmlFor="external-query">
           외부 검색어
         </label>
@@ -192,7 +192,7 @@ function SourceStatus<T>({ state }: { state: SourceState<T> }) {
   }[state.status];
 
   return (
-    <span className="external-panel__status" aria-live="polite">
+    <span className="external-panel__status" data-status={state.status} aria-live="polite">
       {copy}
     </span>
   );
