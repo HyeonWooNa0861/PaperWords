@@ -13,6 +13,17 @@ test("Today page, search entry, and responsive shell render without overlap", as
   await expect(page.locator(".schedule-stamp dd", { hasText: "paperwords-mvp-2026-08-11.v1" })).toBeVisible();
   await expect(page.getByRole("searchbox", { name: "논문 용어 검색" })).toBeVisible();
   await expect(page.getByRole("link", { name: "Dictionary" })).toHaveAttribute("href", "/dictionary");
+
+  const material = await page.locator(".today-panel__reading").evaluate((element) => {
+    const style = getComputedStyle(element);
+    return {
+      backgroundColor: style.backgroundColor,
+      backgroundImage: style.backgroundImage
+    };
+  });
+
+  expect(material.backgroundColor).toBe("rgb(251, 246, 235)");
+  expect(material.backgroundImage).toContain("data:image/svg+xml");
   await expectNoHorizontalOverflow(page);
 });
 

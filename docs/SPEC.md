@@ -9,6 +9,7 @@ PaperWords is a Korean-first AI and computer-science paper terminology PWA. It h
 - Term detail pages with Korean explanations, related terms, sources, and paper relationships.
 - Topic browsing over the local published corpus.
 - Installable PWA behavior with offline fallback and controlled updates.
+- A tactile paper-material interface with warm local surfaces, deterministic CSS grain, and no network visual dependency.
 - Core runtime, production build, and default tests work without network, API keys, accounts, commits, pushes, or deployment.
 
 ## Non-Goals
@@ -36,3 +37,4 @@ PaperWords is a Korean-first AI and computer-science paper terminology PWA. It h
 - Default verification must be network-independent.
 - Public routes, search, recommendations, sitemap, and JSON-LD must not depend on or expose remotely discovered candidates.
 - Removing a previously shipped network surface requires a new PWA cache version so cached pages cannot preserve the retired interface.
+- Paper texture, icons, typography, and color must remain local, deterministic, readable at 390px, and WCAG 2.1 AA compatible.

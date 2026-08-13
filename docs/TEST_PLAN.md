@@ -55,7 +55,9 @@ Standalone browser scripts run a production build first, then start `next start`
 - Schedule unit tests prove Asia/Seoul date resolution around the KST day boundary, the immutable `2026-08-11` to `2026-11-08` 90-day range, and the 20-day no-repeat window.
 - Today route/component tests prove before-range and after-range fallback copy and stable preview selection.
 - The architecture test keeps the retired discovery routes, component, and adapter files absent and prevents dictionary/search code from adding a runtime `fetch` or `/api/` handoff.
+- The paper-material design test locks the warm palette, inline local grain and fiber tokens, primary-surface application, native reading type, selected design preset, and no-network visual constraint.
 - Browser core tests cover desktop and mobile route flows without external requests: Today, local-only dictionary search, removed discovery endpoints returning `404`, term detail, topics, topic detail, relation-only paper detail, offline fallback, keyboard order, and no horizontal overflow.
+- The Today browser check also proves the rendered primary sheet resolves to the expected warm paper color and a browser-parsed local data-image texture.
 - PWA tests prove installability, strict `/sw.js` version-file failures, offline fallback, waiting-worker update, stale-cache cleanup, no broad runtime caching, and exclusion of non-GET, `/api`, metadata routes, `/sw.js`, and cross-origin requests.
 - Accessibility tests run axe against desktop and mobile routes and block release on critical or serious violations. They also cover keyboard-safe forms, live regions, language spans, and install controls.
 - SEO tests prove deterministic metadata, manifest, icon, robots, sitemap, published-only JSON-LD, no abstract body exposure, and no draft leakage.

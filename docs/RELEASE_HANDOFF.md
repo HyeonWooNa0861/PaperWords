@@ -2,7 +2,7 @@
 
 Date: 2026-08-13 KST.
 
-This handoff records the PaperWords v0.4 local-only release candidate. The shared dictionary, search, Today recommendations, topics, and paper relationships use only versioned, verified local content.
+This handoff records the PaperWords v0.5 paper-material release candidate. The shared dictionary, search, Today recommendations, topics, and paper relationships use only versioned, verified local content.
 
 ## Product Scope
 
@@ -22,14 +22,15 @@ This handoff records the PaperWords v0.4 local-only release candidate. The share
 - `/~offline`: direct offline fallback route, noindexed and excluded from sitemap.
 - `/manifest.webmanifest`, `/sw.js`, `/robots.txt`, and `/sitemap.xml`: local PWA and SEO routes derived from published content and deterministic metadata.
 - Former `/api/discovery/terms` and `/api/discovery/papers` routes are removed and return `404`.
+- All routes share the same tactile paper-material system: warm local surfaces, deterministic inline grain and fibers, sheet shadows, restrained technical corner marks, and one ink-blue interaction accent.
 
 ## Local-Only Data Operations
 
 - No runtime route, component, adapter, cache, or environment flag can search a remote terminology or scholarly dataset.
 - DOI, publisher, repository, and documentation URLs remain passive citations. They are opened only after an explicit user action and never enrich the registry automatically.
 - Shared corpus expansion requires local authoring, provenance mapping, Korean language review, schema validation, and explicit publication in a later version.
-- A future per-device personal dataset is not implemented in v0.4. It requires a separate validated schema, local persistence design, provenance state, and conflict policy before implementation.
-- App version `0.4.0` and cache version `paperwords-local-only-v1` retire installed-client caches from the former network-enabled release.
+- A future per-device personal dataset is not implemented in v0.5. It requires a separate validated schema, local persistence design, provenance state, and conflict policy before implementation.
+- App version `0.5.0` and cache version `paperwords-paper-material-v1` replace the prior local-only visual shell without changing the verified corpus.
 
 ## Pinned Commands
 
@@ -80,10 +81,11 @@ Because `/sw.js` reads environment and optional version-file state per request, 
 ## Verification Evidence
 
 - `npm exec --offline --yes --package=pnpm@10.34.5 -- pnpm verify` passed on 2026-08-13 KST.
-- Verified 22 direct dependency pins; lint and typecheck passed; content 45, search 6, schedule 11, and all Vitest 83 tests passed.
+- Verified 22 direct dependency pins; lint and typecheck passed; content 45, search 6, schedule 11, and all Vitest 86 tests passed.
 - The production browser build generated 53 pages with no discovery API route. Desktop/mobile E2E 16, PWA 10, accessibility 18, and SEO 8 tests passed.
 - The local-only E2E check proves both retired discovery URLs return `404`, the dictionary exposes one local search surface, and no external-candidate control remains.
-- A separate Playwright CLI inspection at desktop and 390px mobile widths showed app version `0.4.0`, the local-only copy, eight deterministic `양자화` results, no former discovery section, and only localhost requests.
+- A separate Playwright CLI inspection at desktop and 390px mobile widths showed app version `0.5.0`, browser-parsed local grain on the warm paper surfaces, eight deterministic `양자화` results, zero horizontal overflow, zero console errors, and only localhost requests.
+- The first accessibility pass exposed a 4.25:1 muted-acronym contrast on the new paper tone; the secondary ink was darkened to `#655f55`, after which all 18 desktop/mobile axe checks passed.
 - Structural audit found no `ExternalDiscovery`, discovery implementation path, external discovery environment variable, or runtime CSO/Crossref host outside tests that prove removal, the superseding decision, the superseded ADR, and historical OMX artifacts.
 
 ## Generated Output
@@ -97,4 +99,4 @@ Because `/sw.js` reads environment and optional version-file state per request, 
 
 ## Release Authority
 
-This document grants no standing commit, push, deployment, or publication authority. The current local-only change has not been committed, pushed, or deployed.
+This document grants no standing commit, push, deployment, or publication authority. Current publication status must be verified from Git history and the configured hosting provider.

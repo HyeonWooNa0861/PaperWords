@@ -7,9 +7,9 @@ const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const outputDir = join(root, "public", "icons");
 
 const palette = {
-  canvas: [245, 245, 247, 255],
-  blue: [0, 113, 227, 255],
-  white: [255, 255, 255, 255]
+  canvas: [238, 230, 215, 255],
+  blue: [27, 98, 143, 255],
+  paper: [251, 246, 235, 255]
 };
 
 await Promise.all([
@@ -35,7 +35,7 @@ async function writeIcon(fileName, size, paddingRatio) {
     palette.blue
   );
 
-  drawMonogram(pixels, size, pad, surfaceSize, palette.white);
+  drawMonogram(pixels, size, pad, surfaceSize, palette.paper);
 
   await writeFile(join(outputDir, fileName), encodePng(size, size, pixels));
 }
