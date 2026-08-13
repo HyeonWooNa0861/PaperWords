@@ -149,7 +149,7 @@ export function resolveTodayTermView(
     scheduledDateKst: fallbackEntry.dateKst,
     term: fallbackTerm,
     schedule,
-    messageKo: `${dateKst} KST는 ${schedule.scheduleId} 범위(${schedule.startDateKst} - ${schedule.endDateKst}) 밖입니다. 아래 항목은 버전된 스케줄의 고정 미리보기입니다.`
+    messageKo: `${dateKst} KST는 현재 편집 일정(${schedule.startDateKst} - ${schedule.endDateKst}) 밖입니다. 아래 항목은 확정된 일정의 고정 미리보기입니다.`
   };
 }
 

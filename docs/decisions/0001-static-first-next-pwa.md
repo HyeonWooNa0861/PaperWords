@@ -1,10 +1,10 @@
 # ADR 0001: Static-First Next PWA
 
-Status: Accepted for MVP bootstrap
+Status: Accepted
 
 ## Context
 
-PaperWords must run, build, and test from local curated content without credentials or live scholarly APIs. The MVP still needs installable PWA behavior, offline fallback, and controlled update handling.
+PaperWords must run, build, and test from local curated content without credentials or live scholarly APIs. The first public release still needed installable PWA behavior, offline fallback, and controlled update handling.
 
 ## Decision
 

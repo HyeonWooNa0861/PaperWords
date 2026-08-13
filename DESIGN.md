@@ -4,7 +4,7 @@
 
 - Status: Active
 - Last refreshed: 2026-08-13
-- Primary product surfaces: Today, local-only dictionary search, term detail, topic index/detail, paper relation detail, PWA install/update, offline and not-found states
+- Primary product surfaces: Today, local-only dictionary search, term detail, topic index/detail, paper relation detail, responsive navigation, PWA install/update, offline and not-found states
 - Evidence reviewed: `docs/SPEC.md`, `docs/ARCHITECTURE.md`, `app/**/*.tsx`, `components/**/*.tsx`, `app/globals.css`, current production desktop/mobile captures in `output/playwright/redesign-baseline-*`, and the G005-G008 browser/accessibility constraints
 - Direction: tactile paper technical minimalism adapted for PaperWords, retaining Apple-like restraint without copying Apple trade dress.
 - Selected visual preset: archived `light-mode-paper-technical`, narrowed to warm paper layers, a charcoal desk frame, one ink-blue accent, native typography, and quiet motion
@@ -17,9 +17,9 @@
 
 ## Product goals
 
-- Goals: make one daily concept immediately readable; make bilingual search feel fast and obvious; keep evidence available without competing with the explanation; make the PWA feel native and composed on Apple devices while remaining cross-platform
+- Goals: make one daily concept immediately readable; make bilingual search feel fast and obvious; keep evidence available without competing with the explanation; make compact mobile lookup comfortable with one hand; make desktop feel like a settled study workspace with clear continuation paths; make the PWA feel native and composed on Apple devices while remaining cross-platform
 - Non-goals: changing search ranking, content, schedule, local-only source policy, PWA behavior, or route architecture
-- Success signals: every route has one clear primary heading/action; users can scan the main explanation before metadata; desktop and 390px mobile have no horizontal overflow; existing accessibility, SEO, PWA, and behavior gates stay green
+- Success signals: every route has one clear primary heading/action; users can scan the main explanation before metadata; desktop and 390px mobile have no horizontal overflow; compact screens have persistent reach-friendly navigation; desktop screens expose active location, continuation reading, and topic discovery without feeling sparse; existing accessibility, SEO, PWA, and behavior gates stay green
 
 ## Personas and jobs
 
@@ -29,15 +29,17 @@
 
 ## Information architecture
 
-- Primary navigation: PaperWords home, Dictionary, Topics
+- Primary navigation: PaperWords home, Dictionary, Topics. Desktop uses the header as a persistent active-location control; compact screens add a bottom navigation dock for Today, Search, and Topics.
 - Core routes/screens: `/`, `/dictionary`, `/terms/[slug]`, `/topics`, `/topics/[slug]`, `/papers/[id]`, `/~offline`
-- Content hierarchy: page purpose → English headword/title → Korean meaning and explanation → primary action → related terms/papers → source and schedule metadata
+- Content hierarchy: page purpose -> English headword/title -> Korean meaning and explanation -> primary action -> related terms/papers -> source and schedule metadata
 - Dictionary results end with the local published corpus; there is no secondary remote-candidate section.
+- Immutable schedule and content identifiers remain implementation metadata. Public UI uses human-readable date, schedule, and verification labels rather than raw internal IDs.
 
 ## Design principles
 
 - One focus per surface: the daily term, query, term title, topic, or paper title is the visual anchor.
 - Evidence is calm but reachable: metadata uses grouped secondary surfaces and never disappears.
+- Product over prototype: avoid visible initial-release, beta, raw version, or internal-schedule labels in user-facing surfaces; release state belongs in developer documentation and machine-readable metadata.
 - Material before ornament: warmth, grain, paper edges, inset rules, and shadow depth should make surfaces feel physical without reducing legibility.
 - Color is semantic and scarce: ink blue means action/link/focus; warm warning color is reserved for error states.
 - Native before decorative: use local/system fonts, deterministic CSS texture, and existing assets so offline behavior and performance remain deterministic.
@@ -56,14 +58,14 @@
 ## Components
 
 - Existing components to reuse: `AppShell`, `SearchBox`, `TodayTermPanel`, `TermTitleBlock`, `CompactDictionaryEntry`, `PaperRelationList`, `SourceStampList`, `TopicChip`, `PwaControls`
-- New/changed components: existing shell, cards, search surfaces, evidence rails, offline state, and PWA chrome receive shared paper-material tokens and technical corner details; route semantics and component structure remain unchanged
+- New/changed components: responsive navigation, home continuation surfaces, existing shell, cards, search surfaces, evidence rails, offline state, and PWA chrome receive shared paper-material tokens and technical corner details; route semantics and local-data boundaries remain unchanged
 - Variants and states: primary/secondary buttons; compact/full search; verified local results; empty, error, disabled, offline, install, and update
 - Token/component ownership: visual tokens and component styles live in `app/globals.css`; route semantics stay in existing React components
 
 ## Accessibility
 
 - Target standard: WCAG 2.1 AA for tested routes
-- Keyboard/focus behavior: retain skip link and DOM order; all links, buttons, and fields receive a visible blue focus ring; touch targets are at least 44px where practical
+- Keyboard/focus behavior: retain skip link and DOM order; all links, buttons, and fields receive a visible blue focus ring; interactive controls and bottom navigation targets are at least 44px
 - Contrast/readability: primary and secondary text meet AA on their assigned paper surfaces; body copy remains at least 16px with generous line height; texture opacity stays below the level that competes with text
 - Screen-reader semantics: retain existing headings, landmarks, labels, live regions, language spans, and source relationships
 - Reduced motion and sensory considerations: honor `prefers-reduced-motion`; color never carries verification or state meaning alone
@@ -71,8 +73,22 @@
 ## Responsive behavior
 
 - Supported breakpoints/devices: wide desktop, tablet below 920px, compact/mobile below 640px; minimum validated width 390px
-- Layout adaptations: the charcoal outer frame becomes edge-to-edge warm paper on compact screens; two-column Today/detail grids collapse to one column; sticky evidence rails become normal flow; topic grids become one column; search buttons become full width
+- Layout adaptations: the charcoal outer frame becomes edge-to-edge warm paper on compact screens; two-column Today/detail grids collapse to one column; sticky evidence rails become normal flow; topic grids become one column; search forms stay compact and touch-friendly without creating horizontal overflow
 - Touch/hover differences: hover polish applies only on hover-capable devices; pressed state uses subtle scale; navigation and controls retain comfortable touch spacing
+
+## Mobile one-hand contract
+
+- Compact screens expose a bottom navigation dock with safe-area padding, stable labels, and at least 44px targets for Today, Search, and Topics.
+- Search entry remains reachable without scrolling back to the top of long result lists; the input supports fast paper-reading lookup by English term, acronym, or Korean equivalent.
+- Evidence and provenance stay available, but dense metadata should collapse into grouped compact surfaces before it competes with the definition.
+- No public mobile surface should show raw release IDs, raw schedule IDs, or prototype-stage labels.
+
+## Desktop settled-workspace contract
+
+- Desktop keeps the header navigation visible, marks the active area, and gives the user a stable sense of place.
+- The home route provides continuation paths after Today's term: related reading, focused topics, and local corpus entry points.
+- Desktop topic and term views may use sticky rails, but the rail must support reading orientation rather than becoming a decorative column.
+- Empty space should feel like intentional reading margin, not missing product surface.
 
 ## Interaction states
 

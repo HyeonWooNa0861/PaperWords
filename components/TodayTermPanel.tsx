@@ -8,6 +8,7 @@ import {
   type TodayTermView
 } from "@/src/lib/ui/content";
 import { dictionaryHref, termHref } from "@/src/lib/ui/routes";
+import { EvidenceDisclosure } from "./EvidenceDisclosure";
 import { PaperRelationList } from "./PaperRelationList";
 import { SourceStampList } from "./SourceStampList";
 import { TermTitleBlock } from "./TermTitleBlock";
@@ -43,36 +44,37 @@ export function TodayTermPanel({ registry, view }: TodayTermPanelProps) {
       </div>
 
       <aside className="evidence-rail" aria-label="오늘 용어 검증 정보">
-        <PaperRelationList relations={relations} title="오늘의 관계 논문" limit={visibleRelationCount} showSources={false} />
-        {relations.length > visibleRelationCount ? (
-          <p className="slice-hint">
-            관계 논문 표시 {visibleRelationCount} / 전체 {relations.length}, 용어 해설에서 전체 확인
-          </p>
-        ) : null}
-        <SourceStampList sources={coreSources.slice(0, visibleSourceCount)} title="핵심 용어 출처" compact />
-        {coreSources.length > visibleSourceCount ? (
-          <p className="slice-hint">
-            출처 표시 {visibleSourceCount} / 전체 {coreSources.length}, 용어 해설에서 전체 확인
-          </p>
-        ) : null}
-        <dl className="schedule-stamp" aria-label="스케줄 투명성 스탬프">
-          <div>
-            <dt>KST date</dt>
-            <dd>{view.dateKst}</dd>
-          </div>
-          <div>
-            <dt>Schedule</dt>
-            <dd lang="en">{view.schedule.scheduleId}</dd>
-          </div>
-          <div>
-            <dt>Displayed slot</dt>
-            <dd>{view.scheduledDateKst}</dd>
-          </div>
-          <div>
-            <dt>Version</dt>
-            <dd lang="en">{view.schedule.version}</dd>
-          </div>
-        </dl>
+        <EvidenceDisclosure
+          meta={`논문 ${relations.length}편 · 출처 ${coreSources.length}개`}
+          title="근거와 추천 일정"
+        >
+          <PaperRelationList relations={relations} title="오늘의 관계 논문" limit={visibleRelationCount} showSources={false} />
+          {relations.length > visibleRelationCount ? (
+            <p className="slice-hint">
+              관계 논문 표시 {visibleRelationCount} / 전체 {relations.length}, 용어 해설에서 전체 확인
+            </p>
+          ) : null}
+          <SourceStampList sources={coreSources.slice(0, visibleSourceCount)} title="핵심 용어 출처" compact />
+          {coreSources.length > visibleSourceCount ? (
+            <p className="slice-hint">
+              출처 표시 {visibleSourceCount} / 전체 {coreSources.length}, 용어 해설에서 전체 확인
+            </p>
+          ) : null}
+          <dl className="schedule-stamp" aria-label="추천 일정 정보">
+            <div>
+              <dt>기준 날짜</dt>
+              <dd>{view.dateKst} KST</dd>
+            </div>
+            <div>
+              <dt>추천 원칙</dt>
+              <dd>{view.schedule.durationDays}일 일정 · {view.schedule.noRepeatWindowDays}일 반복 방지</dd>
+            </div>
+            <div>
+              <dt>표시 항목</dt>
+              <dd>{view.scheduledDateKst}</dd>
+            </div>
+          </dl>
+        </EvidenceDisclosure>
       </aside>
     </section>
   );

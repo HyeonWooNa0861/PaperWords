@@ -19,7 +19,7 @@ import { makeValidContentRegistry } from "@/tests/content/fixtures";
 describe("versioned KST schedule", () => {
   const published = loadPublishedContent(contentRegistry);
 
-  it("declares the immutable MVP v1 metadata", () => {
+  it("declares the immutable initial v1 metadata", () => {
     expect(activeSchedule).toMatchObject({
       scheduleId: "paperwords-mvp-2026-08-11.v1",
       version: "v1",

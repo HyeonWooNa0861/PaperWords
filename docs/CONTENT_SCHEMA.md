@@ -2,13 +2,13 @@
 
 The schema is local-only and source-gated. Runtime, build, and default tests use only checked-in content.
 
-The implementation lives in `src/lib/content`. All record schemas are strict Zod objects: unknown keys fail validation, and paper records reject copied abstract body fields such as `abstract`, `abstractText`, and `abstractKo`. The only abstract-related field allowed for MVP papers is `abstractStatus: "not_copied"`.
+The implementation lives in `src/lib/content`. All record schemas are strict Zod objects: unknown keys fail validation, and paper records reject copied abstract body fields such as `abstract`, `abstractText`, and `abstractKo`. The only abstract-related field allowed for published papers is `abstractStatus: "not_copied"`.
 
-## G003 Seed Scope
+## Published Seed Scope
 
-The MVP seed registry publishes exactly 20 terms: 3 foundational AI/CS terms, 8 edge-computing terms, and 9 neural-network-quantization terms. The focused edge terms are Edge Computing, Edge AI, Multi-access Edge Computing, Fog Computing, Cloudlet, Computation Offloading, Federated Learning, and On-device Inference. The focused quantization terms are Neural Network Quantization, Post-Training Quantization, Quantization-Aware Training, Mixed-Precision Quantization, Weight-Only Quantization, Activation Quantization, Integer-Only Inference, Binary Neural Network, and Quantization Calibration.
+The published seed registry currently contains exactly 20 terms: 3 foundational AI/CS terms, 8 edge-computing terms, and 9 neural-network-quantization terms. The focused edge terms are Edge Computing, Edge AI, Multi-access Edge Computing, Fog Computing, Cloudlet, Computation Offloading, Federated Learning, and On-device Inference. The focused quantization terms are Neural Network Quantization, Post-Training Quantization, Quantization-Aware Training, Mixed-Precision Quantization, Weight-Only Quantization, Activation Quantization, Integer-Only Inference, Binary Neural Network, and Quantization Calibration.
 
-Published seed records must all be source-gated and editorially verified. `relatedTermSlugs` are treated as published learning claims, so each related-link field needs both source provenance and editorial attestation from the same declared source. No draft, metadata-only, or language-reviewed record is exposed in the G003 production registry.
+Published seed records must all be source-gated and editorially verified. `relatedTermSlugs` are treated as published learning claims, so each related-link field needs both source provenance and editorial attestation from the same declared source. No draft, metadata-only, or language-reviewed record is exposed in the production registry.
 
 ## Term
 
@@ -26,7 +26,7 @@ Published seed records must all be source-gated and editorially verified. `relat
 
 - `id`, `title`, `authors`, `venue`, `year`, optional `doi`, optional `openAlexId`, and `url`.
 - `metadataSources`: source IDs proving metadata fields.
-- `abstractStatus`: must be `not_copied` for MVP.
+- `abstractStatus`: must be `not_copied` for published records.
 - `relations`: term relation type plus Korean relevance rationale.
 
 ## Source
@@ -43,10 +43,10 @@ Published seed records must all be source-gated and editorially verified. `relat
 
 ## Schedule
 
-- `scheduleId`: immutable local schedule ID. MVP v1 is `paperwords-mvp-2026-08-11.v1`.
+- `scheduleId`: immutable local schedule ID. The initial release keeps its original internal ID for backward compatibility; public UI must not render the raw ID.
 - `version`: released schedule version, currently `v1`.
 - `timezone`: fixed to `Asia/Seoul`.
-- `startDateKst`, `endDateKst`, `durationDays`, and `noRepeatWindowDays`: versioned calendar metadata. MVP v1 spans `2026-08-11` through `2026-11-08`, contains 90 populated KST dates, and uses a 20-day no-repeat window.
+- `startDateKst`, `endDateKst`, `durationDays`, and `noRepeatWindowDays`: versioned calendar metadata. The current published schedule spans `2026-08-11` through `2026-11-08`, contains 90 populated KST dates, and uses a 20-day no-repeat window.
 - `immutableSinceKst`: KST release date for the local schedule version.
 - `entries`: one `{ dateKst, termSlug }` pair per scheduled KST date. Entries must point to published terms only.
 

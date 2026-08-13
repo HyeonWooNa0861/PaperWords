@@ -16,7 +16,7 @@ Corepack 0.29.4 has a stale signing-key failure in this environment, so project 
 
 ## Release Gate
 
-Run the current release gate before the G008 local handoff or any MVP release claim:
+Run the current release gate before a local handoff or production release claim:
 
 - `npm exec --offline --yes --package=pnpm@10.34.5 -- pnpm verify`
 
@@ -56,6 +56,7 @@ Standalone browser scripts run a production build first, then start `next start`
 - Today route/component tests prove before-range and after-range fallback copy and stable preview selection.
 - The architecture test keeps the retired discovery routes, component, and adapter files absent and prevents dictionary/search code from adding a runtime `fetch` or `/api/` handoff.
 - The paper-material design test locks the warm palette, inline local grain and fiber tokens, primary-surface application, native reading type, selected design preset, and no-network visual constraint.
+- Product-shell tests cover the absence of public initial-release/prototype labels and raw internal schedule identifiers, desktop active navigation, desktop continuation/topic discovery, compact mobile bottom navigation, safe-area spacing, at least 44px touch targets, and no horizontal overflow at 390px.
 - Browser core tests cover desktop and mobile route flows without external requests: Today, local-only dictionary search, removed discovery endpoints returning `404`, term detail, topics, topic detail, relation-only paper detail, offline fallback, keyboard order, and no horizontal overflow.
 - The Today browser check also proves the rendered primary sheet resolves to the expected warm paper color and a browser-parsed local data-image texture.
 - PWA tests prove installability, strict `/sw.js` version-file failures, offline fallback, waiting-worker update, stale-cache cleanup, no broad runtime caching, and exclusion of non-GET, `/api`, metadata routes, `/sw.js`, and cross-origin requests.

@@ -1,7 +1,8 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { dictionaryHref, homeHref, topicsHref } from "@/src/lib/ui/routes";
+import { homeHref } from "@/src/lib/ui/routes";
 import { PwaControls } from "./PwaControls";
+import { DesktopNavigation, MobileNavigation } from "./ProductNavigation";
 
 export function AppShell({ children }: Readonly<{ children: ReactNode }>) {
   return (
@@ -15,13 +16,11 @@ export function AppShell({ children }: Readonly<{ children: ReactNode }>) {
             <span className="wordmark__mark" aria-hidden="true">PW</span>
             <span className="wordmark__text" lang="en">PaperWords</span>
           </Link>
-          <nav className="site-nav" aria-label="주요 탐색">
-            <Link href={dictionaryHref}>Dictionary</Link>
-            <Link href={topicsHref}>Topics</Link>
-          </nav>
+          <DesktopNavigation />
         </div>
       </header>
       <PwaControls />
+      <MobileNavigation />
       {children}
       <footer className="site-footer">
         <div className="site-footer__inner">

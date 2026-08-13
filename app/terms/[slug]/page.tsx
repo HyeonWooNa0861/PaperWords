@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CompactDictionaryEntry } from "@/components/CompactDictionaryEntry";
+import { EvidenceDisclosure } from "@/components/EvidenceDisclosure";
 import { JsonLd } from "@/components/JsonLd";
 import { PaperRelationList } from "@/components/PaperRelationList";
 import { SourceStampList } from "@/components/SourceStampList";
@@ -117,8 +118,10 @@ export default async function TermPage({ params }: TermPageProps) {
       </article>
 
       <aside className="evidence-rail detail-rail" aria-label="용어 근거">
-        <PaperRelationList relations={relations} />
-        <SourceStampList sources={sources} />
+        <EvidenceDisclosure meta={`논문 ${relations.length}편 · 출처 ${sources.length}개`} title="용어 근거">
+          <PaperRelationList relations={relations} />
+          <SourceStampList sources={sources} />
+        </EvidenceDisclosure>
       </aside>
     </main>
   );

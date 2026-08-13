@@ -34,11 +34,17 @@ describe("Today route content", () => {
 
     render(<TodayTermPanel registry={registry} view={view!} />);
 
+    const scheduleStamp = screen.getByLabelText("추천 일정 정보");
+
     expect(screen.getByRole("heading", { name: /Transformer/i })).toBeInTheDocument();
     expect(screen.getAllByText("2026-08-11").length).toBeGreaterThanOrEqual(1);
-    expect(screen.getByText("paperwords-mvp-2026-08-11.v1")).toBeInTheDocument();
+    expect(scheduleStamp).toHaveTextContent(/기준 날짜|KST 기준일/);
+    expect(scheduleStamp).toHaveTextContent(/추천 원칙/);
+    expect(scheduleStamp).toHaveTextContent(/90일|20일/);
+    expect(scheduleStamp).not.toHaveTextContent(/paperwords-mvp|\bMVP\b/i);
     expect(screen.getByText(/순환 또는 합성곱 시퀀스 층 없이 어텐션/)).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "용어 해설 열기" })).toHaveAttribute("href", "/terms/transformer");
+    expect(document.body).not.toHaveTextContent(/paperwords-mvp|\bMVP\b/i);
   });
 
   it("deduplicates Today source stamps, excludes non-core term sources, and keeps schedule transparency visible", () => {
@@ -49,13 +55,15 @@ describe("Today route content", () => {
     const rail = screen.getByLabelText("오늘 용어 검증 정보");
     const relationHeading = within(rail).getByRole("heading", { name: "오늘의 관계 논문" });
     const sourceHeading = within(rail).getByRole("heading", { name: "핵심 용어 출처" });
-    const scheduleLabel = within(rail).getByText("Schedule");
+    const scheduleStamp = within(rail).getByLabelText("추천 일정 정보");
 
     expect(within(rail).getAllByText("transformer-neurips-2017")).toHaveLength(1);
     expect(within(rail).queryByText("rag-neurips-2020")).not.toBeInTheDocument();
-    expect(within(rail).getByText("paperwords-mvp-2026-08-11.v1")).toBeInTheDocument();
+    expect(scheduleStamp).toHaveTextContent(/기준 날짜|KST 기준일/);
+    expect(scheduleStamp).toHaveTextContent(/추천 원칙/);
+    expect(rail).not.toHaveTextContent(/paperwords-mvp|\bMVP\b/i);
     expect(relationHeading.compareDocumentPosition(sourceHeading) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-    expect(sourceHeading.compareDocumentPosition(scheduleLabel) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(sourceHeading.compareDocumentPosition(scheduleStamp) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
   it("uses an explicit stable fallback outside the schedule range", () => {
@@ -66,7 +74,7 @@ describe("Today route content", () => {
       dateKst: "2026-12-01",
       scheduledDateKst: "2026-11-08"
     });
-    expect(view?.messageKo).toContain("범위");
+    expect(view?.messageKo).toContain("밖입니다");
     expect(view?.term.slug).toBe("mixed-precision-quantization");
   });
 
@@ -82,12 +90,13 @@ describe("Today route content", () => {
 
     render(<TodayTermPanel registry={registry} view={view!} />);
 
-    const scheduleStamp = screen.getByLabelText("스케줄 투명성 스탬프");
+    const scheduleStamp = screen.getByLabelText("추천 일정 정보");
 
-    expect(screen.getByText(/2026-08-10 KST는 paperwords-mvp-2026-08-11\.v1 범위/)).toBeInTheDocument();
+    expect(screen.getByText(/2026-08-10 KST는/)).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /Transformer/i })).toBeInTheDocument();
-    expect(within(scheduleStamp).getByText("2026-08-10")).toBeInTheDocument();
-    expect(within(scheduleStamp).getByText("2026-08-11")).toBeInTheDocument();
+    expect(scheduleStamp).toHaveTextContent("2026-08-10 KST");
+    expect(scheduleStamp).toHaveTextContent("2026-08-11");
+    expect(document.body).not.toHaveTextContent(/paperwords-mvp|\bMVP\b/i);
   });
 });
 
@@ -100,6 +109,7 @@ describe("Dictionary route and search states", () => {
     const ui = await DictionaryPage({ searchParams: Promise.resolve({ q: "RAG" }) });
     render(ui);
 
+    expect(screen.getByRole("main")).toHaveClass("page--dictionary");
     expect(screen.getByRole("searchbox", { name: "논문 용어 검색" })).toHaveValue("RAG");
     expect(screen.getByText("1개 결과")).toBeInTheDocument();
     expect(screen.getByText("1. 정확 일치: 약어")).toBeInTheDocument();

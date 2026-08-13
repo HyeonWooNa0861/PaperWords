@@ -26,7 +26,7 @@ export default async function DictionaryPage({ searchParams }: DictionaryPagePro
   });
 
   return (
-    <main className="page page--narrow" id="main-content">
+    <main className="page page--narrow page--dictionary" id="main-content">
       <header className="page-header">
         <p className="eyebrow">Dictionary</p>
         <h1>검증된 논문 용어 검색</h1>
@@ -35,7 +35,7 @@ export default async function DictionaryPage({ searchParams }: DictionaryPagePro
           결과를 다시 열 수 있습니다.
         </p>
       </header>
-      <SearchBox defaultQuery={query} />
+      <SearchBox defaultQuery={query} suggestions={["Edge AI", "PTQ", "양자화"]} />
       <SearchResults lookups={makeContentLookups(registry)} response={response} />
     </main>
   );

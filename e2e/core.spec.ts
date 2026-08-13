@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import { blockExternalRequests, expectNoHorizontalOverflow } from "./helpers/network";
 
 test.beforeEach(async ({ context }) => {
@@ -10,9 +10,12 @@ test("Today page, search entry, and responsive shell render without overlap", as
 
   await expect(page.getByRole("banner")).toBeVisible();
   await expect(page.getByText("오늘의 논문 용어")).toBeVisible();
-  await expect(page.locator(".schedule-stamp dd", { hasText: "paperwords-mvp-2026-08-11.v1" })).toBeVisible();
+  await expect(page.locator(".schedule-stamp")).toContainText(/기준 날짜|KST 기준일/);
+  await expect(page.locator(".schedule-stamp")).toContainText(/추천 원칙/);
+  await expect(page.locator(".schedule-stamp")).not.toContainText(/paperwords-mvp|\bMVP\b/i);
   await expect(page.getByRole("searchbox", { name: "논문 용어 검색" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Dictionary" })).toHaveAttribute("href", "/dictionary");
+  await expect(page.locator(".home-discovery")).toBeVisible();
+  await expect(page.locator("body")).not.toContainText(/paperwords-mvp|\bMVP\b/i);
 
   const material = await page.locator(".today-panel__reading").evaluate((element) => {
     const style = getComputedStyle(element);
@@ -24,6 +27,54 @@ test("Today page, search entry, and responsive shell render without overlap", as
 
   expect(material.backgroundColor).toBe("rgb(251, 246, 235)");
   expect(material.backgroundImage).toContain("data:image/svg+xml");
+  await expectNoHorizontalOverflow(page);
+});
+
+test("responsive product navigation and dictionary search stay touch friendly", async ({ page }) => {
+  await page.goto("/");
+
+  const viewportWidth = page.viewportSize()?.width ?? 1280;
+
+  if (viewportWidth <= 720) {
+    const mobileNav = page.locator(".mobile-nav");
+    await expect(mobileNav).toBeVisible();
+    await expect(page.locator(".site-nav")).toBeHidden();
+    await expect(mobileNav.getByRole("link", { name: "오늘" })).toHaveAttribute("aria-current", "page");
+
+    for (const label of ["오늘", "검색", "주제"]) {
+      const box = await mobileNav.getByRole("link", { name: label }).boundingBox();
+      expect(box?.width ?? 0).toBeGreaterThanOrEqual(44);
+      expect(box?.height ?? 0).toBeGreaterThanOrEqual(44);
+    }
+
+    await mobileNav.getByRole("link", { name: "검색" }).click();
+    await expect(page).toHaveURL(/\/dictionary$/);
+    await expect(page.locator("main.page--dictionary")).toBeVisible();
+    await expect(page.locator(".mobile-nav").getByRole("link", { name: "검색" })).toHaveAttribute(
+      "aria-current",
+      "page"
+    );
+
+    const searchBox = page.locator(".page--dictionary .search-box");
+    const searchStyle = await searchBox.evaluate((element) => {
+      const style = getComputedStyle(element);
+      return {
+        position: style.position,
+        top: style.top
+      };
+    });
+    expect(searchStyle.position).toBe("sticky");
+    const submitBox = await page.getByRole("button", { name: "검색", exact: true }).boundingBox();
+    expect(submitBox?.height ?? 0).toBeGreaterThanOrEqual(44);
+  } else {
+    const siteNav = page.locator(".site-nav");
+    await expect(siteNav).toBeVisible();
+    await expect(page.locator(".mobile-nav")).toBeHidden();
+    await expect(siteNav.getByRole("link", { name: "Today" })).toHaveAttribute("aria-current", "page");
+    await expect(siteNav.getByRole("link", { name: "Dictionary" })).toHaveAttribute("href", "/dictionary");
+    await expect(page.locator(".home-discovery")).toBeVisible();
+  }
+
   await expectNoHorizontalOverflow(page);
 });
 
@@ -62,6 +113,7 @@ test("term detail shows relations, sources, and deep refresh support", async ({ 
 
   await expect(page.getByRole("heading", { name: /Neural Network Quantization/i })).toBeVisible();
   await expect(page.getByRole("heading", { name: "함께 읽을 용어" })).toBeVisible();
+  await openEvidenceDisclosureIfCollapsed(page, "용어 근거");
   await expect(page.getByRole("heading", { name: "논문 관계선" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "출처 스탬프" })).toBeVisible();
 
@@ -77,6 +129,7 @@ test("topics navigation reaches filtered topic terms and relation papers", async
   await expect(page.getByRole("heading", { name: "Model Quantization" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "공개 용어" })).toBeVisible();
   await expect(page.getByText("Neural Network Quantization")).toBeVisible();
+  await openEvidenceDisclosureIfCollapsed(page, "주제 관련 논문");
   await expect(page.getByRole("heading", { name: "관계로 연결된 대표 논문" })).toBeVisible();
   await expectNoHorizontalOverflow(page);
 });
@@ -118,3 +171,19 @@ test("keyboard tab order reaches navigation and dictionary form controls", async
   await page.keyboard.press("Tab");
   await expect(page.getByRole("button", { name: "검색", exact: true })).toBeFocused();
 });
+
+async function openEvidenceDisclosureIfCollapsed(page: Page, title: string): Promise<void> {
+  const summary = page.locator(".evidence-disclosure__summary").filter({ hasText: title }).first();
+
+  if (!(await summary.isVisible())) {
+    return;
+  }
+
+  const isOpen = await summary.evaluate((element) => {
+    return (element.parentElement as HTMLDetailsElement | null)?.open ?? true;
+  });
+
+  if (!isOpen) {
+    await summary.click();
+  }
+}

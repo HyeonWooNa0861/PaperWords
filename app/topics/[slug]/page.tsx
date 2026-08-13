@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CompactDictionaryEntry } from "@/components/CompactDictionaryEntry";
+import { EvidenceDisclosure } from "@/components/EvidenceDisclosure";
 import { PaperRelationList } from "@/components/PaperRelationList";
 import { TopicChip } from "@/components/TopicChip";
 import {
@@ -79,7 +80,9 @@ export default async function TopicPage({ params }: TopicPageProps) {
       </article>
 
       <aside className="evidence-rail detail-rail" aria-label="주제 관련 논문">
-        <PaperRelationList relations={featuredPapers} title="관계로 연결된 대표 논문" />
+        <EvidenceDisclosure meta={`${featuredPapers.length}편의 논문 관계`} title="주제 관련 논문">
+          <PaperRelationList relations={featuredPapers} title="관계로 연결된 대표 논문" />
+        </EvidenceDisclosure>
       </aside>
     </main>
   );

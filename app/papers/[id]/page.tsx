@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/JsonLd";
+import { EvidenceDisclosure } from "@/components/EvidenceDisclosure";
 import { SourceStampList } from "@/components/SourceStampList";
 import { TopicChip } from "@/components/TopicChip";
 import {
@@ -145,7 +146,9 @@ export default async function PaperPage({ params }: PaperPageProps) {
       </article>
 
       <aside className="evidence-rail detail-rail" aria-label="논문 출처">
-        <SourceStampList sources={sources} />
+        <EvidenceDisclosure meta={`${sources.length}개 검증 출처`} title="논문 출처">
+          <SourceStampList sources={sources} />
+        </EvidenceDisclosure>
       </aside>
     </main>
   );

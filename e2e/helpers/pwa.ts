@@ -164,7 +164,12 @@ export async function expectStoredPwaVersion(page: Page, versions: PaperWordsPwa
 }
 
 export async function expectRenderedPwaVersion(page: Page, versions: PaperWordsPwaVersions): Promise<void> {
-  await expect(page.locator(".sr-only", { hasText: versions.contentVersion })).toBeAttached();
+  const signal = page.locator(".pwa-version-signal");
+
+  await expect(signal).toBeAttached();
+  await expect(signal).toHaveAttribute("data-app-version", versions.appVersion);
+  await expect(signal).toHaveAttribute("data-content-version", versions.contentVersion);
+  await expect(signal).toHaveAttribute("data-cache-version", versions.cacheVersion);
 }
 
 export async function getServiceWorkerControlState(page: Page): Promise<ServiceWorkerControlState> {

@@ -19,7 +19,7 @@ PaperWords uses a static-first Next.js App Router architecture.
 1. Local content is parsed with Zod.
 2. Public loaders expose only `published` records.
 3. Search builds from the published registry and applies explicit match classes after MiniSearch candidate retrieval. Query normalization applies Unicode NFKC, ASCII case folding, separator convergence, Hangul preservation, and safe empty/unsupported/oversized states before candidate search.
-4. The daily resolver maps an Asia/Seoul date to one scheduled published term from the immutable `paperwords-mvp-2026-08-11.v1` local schedule.
+4. The daily resolver maps an Asia/Seoul date to one scheduled published term from the immutable local schedule. The original schedule ID remains an internal implementation identifier and is not rendered in public UI.
 5. Route components join typed records to render terms, topics, papers, sources, and relation rationale.
 
 ## Search And Schedule
@@ -38,11 +38,18 @@ PaperWords uses a static-first Next.js App Router architecture.
 - Corpus changes happen before release through the local authoring and validation pipeline. No runtime response can mutate or supplement the registry.
 - A future personal dataset layer is intentionally unimplemented. If introduced, it must use device-local persistence, schema validation, explicit provenance, and a separate trust state; it cannot silently merge into the shared `published` registry.
 
+## Responsive Product Shell
+
+- The app shell owns product navigation for PaperWords home, Dictionary, and Topics. Desktop must expose the active route in the header so users retain a stable sense of place.
+- Compact screens keep top chrome light and provide a bottom navigation dock for Today, Search, and Topics. The dock must respect safe-area insets and preserve at least 44px interactive targets.
+- User-facing schedule and version copy is deliberately human-readable. Raw schedule IDs, cache IDs, and content-version identifiers stay in local data and service-worker metadata instead of public route copy.
+- The home route is the desktop retention surface: Today's term remains primary, then the route should provide continuation reading, focused topic entry points, and local corpus shortcuts without adding any remote data source.
+
 ## PWA Runtime
 
 - `src/lib/pwa/version.ts` is the single source of truth for app, content, cache versions, and stable PaperWords cache names.
 - `src/lib/pwa/worker.ts` generates the owned service worker served by `app/sw.js/route.ts` at `/sw.js` with JavaScript content type, no-cache headers, and `Service-Worker-Allowed: /`.
-- The worker precaches only `/`, `/dictionary`, `/topics`, `/~offline`, the manifest, and local PNG icons. Runtime caching is limited to same-origin navigations, explicit core assets, and `/_next/static/` files. The paper-material release uses cache version `paperwords-paper-material-v1` so installed clients replace the prior local-only visual shell while keeping the same verified content registry.
+- The worker precaches only `/`, `/dictionary`, `/topics`, `/~offline`, the manifest, and local PNG icons. Runtime caching is limited to same-origin navigations, explicit core assets, and `/_next/static/` files. Product-shell releases must bump the cache version so installed clients replace prior local UI chrome while keeping the same verified content registry when the corpus is unchanged.
 - Navigation uses network-first behavior, caches visited public pages, and falls back to `/~offline` when a requested page is unavailable offline. The worker skips cross-origin requests, mutations, `/api`, `/sw.js`, robots, and sitemap responses.
 - The only client message is `SKIP_WAITING`. The only worker-to-client signal is `PAPERWORDS_VERSION`; `components/PwaControls.tsx` shows an accessible update banner and reloads only after the user activates that banner.
 - The PWA Playwright suite sets `PAPERWORDS_PWA_VERSION_FILE=output/playwright/pwa-version.json` for version A/B update coverage. Non-PWA browser suites leave it unset. When `PAPERWORDS_PWA_VERSION_FILE` is unset, `/sw.js` uses deterministic defaults from `src/lib/pwa/version.ts` plus any direct `PAPERWORDS_APP_VERSION`, `PAPERWORDS_CONTENT_VERSION`, and `PAPERWORDS_CACHE_VERSION` environment overrides.

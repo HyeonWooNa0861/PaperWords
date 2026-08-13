@@ -11,9 +11,9 @@ export interface PaperWordsCacheNames {
 }
 
 export const PAPERWORDS_PWA_DEFAULT_VERSIONS: PaperWordsPwaVersions = {
-  appVersion: "0.5.0",
+  appVersion: "0.6.0",
   contentVersion: "paperwords-mvp-2026-08-11.v1",
-  cacheVersion: "paperwords-paper-material-v1"
+  cacheVersion: "paperwords-research-desk-v1"
 };
 
 export const PAPERWORDS_CACHE_PREFIX = "paperwords";

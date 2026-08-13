@@ -157,7 +157,8 @@ test("version B waits, activates only after click, deletes stale caches, and kee
 
   const updateButton = page.getByRole("button", { name: "업데이트 적용" });
   await expect(updateButton).toBeVisible();
-  await expect(page.locator(".pwa-banner", { hasText: "paperwords-content-test-b" })).toBeAttached();
+  await expect(page.locator(".pwa-banner")).toContainText("로컬 콘텐츠와 오프라인 화면의 업데이트");
+  await expectRenderedPwaVersion(page, versionB);
   await expectStoredPwaVersion(page, versionB);
   await expectCacheVersion(page, versionA);
 

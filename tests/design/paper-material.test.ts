@@ -26,4 +26,17 @@ describe("paper material design contract", () => {
     expect(design).toContain("texture opacity stays below the level that competes with text");
     expect(design).toContain("no new dependency, external font, runtime image, or animation library");
   });
+
+  it("keeps the product shell usable on mobile and settled on desktop", () => {
+    expect(css).toMatch(/\.site-nav\s+a\[aria-current="page"\]\s*\{/);
+    expect(css).toMatch(/\.mobile-nav\s*\{[\s\S]*?position:\s*fixed;/);
+    expect(css).toMatch(/\.mobile-nav\s*\{[\s\S]*?bottom:\s*max\(0\.5rem,\s*env\(safe-area-inset-bottom\)\);/);
+    expect(css).toMatch(/\.mobile-nav\s+a\s*\{[\s\S]*?min-height:\s*(?:44px|2\.75rem|3rem);/);
+    expect(css).toMatch(/@media \(max-width: 640px\)\s*\{[\s\S]*?\.app-shell\s*\{[\s\S]*?padding-bottom:\s*calc\(4\.5rem \+ env\(safe-area-inset-bottom\)\);/);
+    expect(css).toMatch(/\.page--dictionary\s*(?:>|\s)\s*\.search-box\s*\{[\s\S]*?position:\s*sticky;/);
+    expect(css).toMatch(/\.home-discovery\s*\{/);
+    expect(css).toMatch(/\.home-discovery__topic-grid\s*\{[\s\S]*?grid-template-columns:\s*repeat/);
+    expect(design).toContain("bottom navigation dock");
+    expect(design).toContain("Desktop settled-workspace contract");
+  });
 });

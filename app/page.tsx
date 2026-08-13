@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { HomeDiscovery } from "@/components/HomeDiscovery";
 import { SearchBox } from "@/components/SearchBox";
 import { TodayTermPanel } from "@/components/TodayTermPanel";
 import { getPublishedRegistry, resolveTodayTermView } from "@/src/lib/ui/content";
@@ -36,6 +37,8 @@ export default function Home() {
         </div>
         <SearchBox compact />
       </section>
+
+      <HomeDiscovery registry={registry} todayTerm={today?.term} />
     </main>
   );
 }

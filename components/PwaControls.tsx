@@ -159,25 +159,17 @@ export function PwaControls() {
   const hasVisibleControls = Boolean(waitingWorker || installPrompt || installState === "installed");
 
   if (!hasVisibleControls) {
-    return (
-      <p className="sr-only" aria-live="polite">
-        PaperWords 앱 버전 {workerVersion.appVersion}, 콘텐츠 버전 {workerVersion.contentVersion}
-      </p>
-    );
+    return <PwaVersionSignal versions={workerVersion} />;
   }
 
   return (
     <section className="pwa-controls" aria-label="앱 상태" data-cache-version={workerVersion.cacheVersion}>
-      <p className="sr-only" aria-live="polite">
-        PaperWords 앱 버전 {workerVersion.appVersion}, 콘텐츠 버전 {workerVersion.contentVersion}
-      </p>
+      <PwaVersionSignal versions={workerVersion} />
       {waitingWorker ? (
         <div className="pwa-banner" role="status" aria-labelledby="pwa-update-title">
           <div>
             <h2 id="pwa-update-title">새 PaperWords 버전 준비됨</h2>
-            <p>
-              앱 {workerVersion.appVersion}, 콘텐츠 {workerVersion.contentVersion} 업데이트를 적용할 수 있습니다.
-            </p>
+            <p>로컬 콘텐츠와 오프라인 화면의 업데이트를 적용할 수 있습니다.</p>
           </div>
           <button className="button" type="button" onClick={handleUpdate}>
             업데이트 적용
@@ -201,6 +193,18 @@ export function PwaControls() {
         </p>
       ) : null}
     </section>
+  );
+}
+
+function PwaVersionSignal({ versions }: Readonly<{ versions: PaperWordsPwaVersions }>) {
+  return (
+    <span
+      className="pwa-version-signal"
+      data-app-version={versions.appVersion}
+      data-cache-version={versions.cacheVersion}
+      data-content-version={versions.contentVersion}
+      hidden
+    />
   );
 }
 
