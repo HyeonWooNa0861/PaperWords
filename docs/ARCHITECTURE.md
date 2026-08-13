@@ -11,8 +11,7 @@ PaperWords uses a static-first Next.js App Router architecture.
 - `src/lib/search/`: bilingual normalization, MiniSearch candidate retrieval, and deterministic post-ranking.
 - `src/lib/schedule/`: Asia/Seoul date resolution and schedule selection.
 - `src/lib/pwa/`: service-worker registration, version state, and update behavior.
-- `src/lib/discovery/`: validated external-query boundary, CSO parser/search, Crossref metadata adapter, cache policy, and upstream error mapping.
-- `scripts/`: local validators and optional tooling-only metadata adapters.
+- `scripts/`: local validators, asset generation, and bounded test launchers.
 - `tests/` and `e2e/`: unit/component/integration and browser checks.
 
 ## Data Flow
@@ -22,7 +21,6 @@ PaperWords uses a static-first Next.js App Router architecture.
 3. Search builds from the published registry and applies explicit match classes after MiniSearch candidate retrieval. Query normalization applies Unicode NFKC, ASCII case folding, separator convergence, Hangul preservation, and safe empty/unsupported/oversized states before candidate search.
 4. The daily resolver maps an Asia/Seoul date to one scheduled published term from the immutable `paperwords-mvp-2026-08-11.v1` local schedule.
 5. Route components join typed records to render terms, topics, papers, sources, and relation rationale.
-6. Only after an explicit browser action, same-origin `/api/discovery/*` routes fetch transient CSO or Crossref candidates. These responses never enter the published registry.
 
 ## Search And Schedule
 
@@ -31,25 +29,20 @@ PaperWords uses a static-first Next.js App Router architecture.
 - `content/schedule.ts` stores the released 90-day Asia/Seoul schedule as versioned local data.
 - `src/lib/schedule` owns KST date resolution, schedule lookup, and invariant validation. It uses UTC arithmetic plus the fixed KST offset so results do not depend on the machine timezone.
 
-## Network Policy
+## Local-Only Data And Network Policy
 
-The core app, build, and default tests do not require network or credentials. External discovery is optional and source-separated:
-
-- The browser calls only same-origin `/api/discovery/terms` and `/api/discovery/papers` routes.
-- CSO topic labels come from the public CSO 3.5 portal payload, are cached upstream for seven days, and link back to official CSO search pages. CSO is attributed as CC BY 4.0.
-- Crossref uses the anonymous public REST pool with no API key. Requests select bibliographic fields only, omit abstracts, are serialized within each server instance, and use one-hour upstream and CDN caching.
-- Crossref validates the response envelope and then validates items independently, so one malformed legacy record is dropped instead of disabling every candidate for the query. DOI links encode reserved path characters before rendering.
-- `PAPERWORDS_CROSSREF_MAILTO` is an optional contact address for Crossref's free polite pool; it is not required and is never returned to the browser.
-- `PAPERWORDS_EXTERNAL_DISCOVERY_ENABLED=0` disables both discovery routes with a no-store `503` before any upstream request. The default is enabled.
-- This remains a best-effort beta surface: public unique queries can spend host and upstream free-tier quota, Crossref serialization is only per server instance, and the CSO adapter intentionally fails closed if the current portal payload shape changes.
-- 400, 429, timeout, unavailable-source, and malformed-response states are explicit. A failed source does not hide results from the other source.
-- No candidate is persisted, indexed for SEO, scheduled, or automatically marked `published`.
+- Search, recommendations, topics, and paper relationships read only from the checked-in published registry.
+- There is no runtime discovery API, remote terminology adapter, scholarly metadata adapter, or environment switch that can enable one.
+- The app does not fetch DOI, publisher, repository, or documentation URLs. Rendered citation anchors are passive references and leave PaperWords only after an explicit user action.
+- Runtime startup, production build, and the full release gate require no network, API key, account, or upstream availability.
+- Corpus changes happen before release through the local authoring and validation pipeline. No runtime response can mutate or supplement the registry.
+- A future personal dataset layer is intentionally unimplemented. If introduced, it must use device-local persistence, schema validation, explicit provenance, and a separate trust state; it cannot silently merge into the shared `published` registry.
 
 ## PWA Runtime
 
 - `src/lib/pwa/version.ts` is the single source of truth for app, content, cache versions, and stable PaperWords cache names.
 - `src/lib/pwa/worker.ts` generates the owned service worker served by `app/sw.js/route.ts` at `/sw.js` with JavaScript content type, no-cache headers, and `Service-Worker-Allowed: /`.
-- The worker precaches only `/`, `/dictionary`, `/topics`, `/~offline`, the manifest, and local PNG icons. Runtime caching is limited to same-origin navigations, explicit core assets, and `/_next/static/` files.
+- The worker precaches only `/`, `/dictionary`, `/topics`, `/~offline`, the manifest, and local PNG icons. Runtime caching is limited to same-origin navigations, explicit core assets, and `/_next/static/` files. The local-only change uses cache version `paperwords-local-only-v1` to retire cached pages from the former network-enabled release.
 - Navigation uses network-first behavior, caches visited public pages, and falls back to `/~offline` when a requested page is unavailable offline. The worker skips cross-origin requests, mutations, `/api`, `/sw.js`, robots, and sitemap responses.
 - The only client message is `SKIP_WAITING`. The only worker-to-client signal is `PAPERWORDS_VERSION`; `components/PwaControls.tsx` shows an accessible update banner and reloads only after the user activates that banner.
 - The PWA Playwright suite sets `PAPERWORDS_PWA_VERSION_FILE=output/playwright/pwa-version.json` for version A/B update coverage. Non-PWA browser suites leave it unset. When `PAPERWORDS_PWA_VERSION_FILE` is unset, `/sw.js` uses deterministic defaults from `src/lib/pwa/version.ts` plus any direct `PAPERWORDS_APP_VERSION`, `PAPERWORDS_CONTENT_VERSION`, and `PAPERWORDS_CACHE_VERSION` environment overrides.
@@ -61,5 +54,4 @@ The core app, build, and default tests do not require network or credentials. Ex
 
 - `PAPERWORDS_SITE_URL` is the canonical deployment override. When it is unset or invalid, local builds use the deterministic default `http://localhost:3000`; the project does not claim an arbitrary production domain.
 - `app/sitemap.ts` and `app/robots.ts` derive from published local content only. The offline fallback route is noindexed and excluded from the sitemap.
-- Discovery API responses send `X-Robots-Tag: noindex, nofollow`; transient external candidates are absent from route metadata and structured data.
 - Term pages render escaped `DefinedTerm` JSON-LD and paper pages render minimal `ScholarlyArticle` JSON-LD from locally validated fields only. Paper JSON-LD intentionally omits abstract fields.

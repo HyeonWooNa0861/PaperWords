@@ -106,17 +106,20 @@ describe("Dictionary route and search states", () => {
     expect(
       screen.getByRole("link", { name: /Retrieval-Augmented Generation RAG/i })
     ).toHaveAttribute("href", "/terms/retrieval-augmented-generation");
-    expect(screen.getByRole("searchbox", { name: "외부 검색어" })).toHaveValue("RAG");
-    expect(screen.getByText("미검증 후보")).toBeInTheDocument();
+    expect(screen.getAllByRole("searchbox")).toHaveLength(1);
+    expect(screen.queryByText(/외부 공개 데이터 탐색/)).not.toBeInTheDocument();
   });
 
-  it("uses the top verified English headword for a Korean external-discovery handoff", async () => {
+  it("keeps Korean queries inside the local verified registry", async () => {
     const ui = await DictionaryPage({ searchParams: Promise.resolve({ q: "양자화" }) });
     render(ui);
 
-    expect(screen.getByRole("searchbox", { name: "외부 검색어" })).toHaveValue(
-      "Neural Network Quantization"
+    expect(screen.getByRole("searchbox", { name: "논문 용어 검색" })).toHaveValue("양자화");
+    expect(screen.getByRole("link", { name: "Quantization Calibration" })).toHaveAttribute(
+      "href",
+      "/terms/quantization-calibration"
     );
+    expect(screen.queryByRole("button", { name: "외부 데이터 검색" })).not.toBeInTheDocument();
   });
 
   it("labels exact, Korean, prefix, fuzzy, and body matches", () => {

@@ -24,7 +24,6 @@ output/
 # local env and secrets
 .env
 .env.*
-!.env.example
 
 # local/editor output
 .DS_Store

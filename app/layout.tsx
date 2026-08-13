@@ -7,7 +7,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   ...createRouteMetadata({
     title: "PaperWords",
-    description: "Korean-first AI paper terminology dictionary.",
+    description: "Korean-first AI paper terminology dictionary powered by verified local content.",
     path: "/"
   }),
   applicationName: "PaperWords",

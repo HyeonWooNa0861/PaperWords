@@ -29,64 +29,20 @@ test("bilingual dictionary submit opens a published result", async ({ page }) =>
   await expect(page.getByRole("heading", { name: /Quantization Calibration/i })).toBeVisible();
 });
 
-test("external discovery stays separate and renders mocked open-network candidates", async ({ page }) => {
-  await page.route("**/api/discovery/terms?**", async (route) => {
-    await route.fulfill({
-      contentType: "application/json",
-      body: JSON.stringify({
-        query: "neural network quantization",
-        source: {
-          id: "cso",
-          name: "Computer Science Ontology 3.5",
-          url: "https://cso.kmi.open.ac.uk/downloads",
-          licenseNote: "CC BY 4.0"
-        },
-        candidates: [
-          {
-            label: "quantized llms",
-            url: "https://cso.kmi.open.ac.uk/search.php?q=quantized+llms",
-            verificationStatus: "external-unverified"
-          }
-        ]
-      })
-    });
-  });
-  await page.route("**/api/discovery/papers?**", async (route) => {
-    await route.fulfill({
-      contentType: "application/json",
-      body: JSON.stringify({
-        query: "neural network quantization",
-        source: {
-          id: "crossref",
-          name: "Crossref REST API",
-          url: "https://www.crossref.org/documentation/retrieve-metadata/",
-          licenseNote: "public metadata"
-        },
-        candidates: [
-          {
-            doi: "10.1234/paperwords-e2e",
-            title: "Neural Network Quantization for Efficient Inference",
-            authors: ["Ada Lovelace"],
-            year: 2025,
-            url: "https://doi.org/10.1234/paperwords-e2e",
-            verificationStatus: "external-unverified"
-          }
-        ]
-      })
-    });
-  });
+test("dictionary stays local-only and removed discovery APIs return 404", async ({ page, request }) => {
+  const termDiscovery = await request.get("/api/discovery/terms?q=edge");
+  const paperDiscovery = await request.get("/api/discovery/papers?q=quantization");
+
+  expect(termDiscovery.status()).toBe(404);
+  expect(paperDiscovery.status()).toBe(404);
 
   await page.goto("/dictionary?q=양자화");
 
-  await expect(page.getByRole("searchbox", { name: "외부 검색어" })).toHaveValue(
-    "Neural Network Quantization"
-  );
-  await expect(page.getByText("미검증 후보")).toBeVisible();
-  await page.getByRole("button", { name: "외부 데이터 검색" }).click();
-  await expect(page.getByRole("link", { name: "quantized llms" })).toBeVisible();
-  await expect(
-    page.getByRole("link", { name: "Neural Network Quantization for Efficient Inference" })
-  ).toBeVisible();
+  await expect(page.getByRole("searchbox", { name: "논문 용어 검색" })).toHaveValue("양자화");
+  await expect(page.getByRole("link", { name: "Quantization Calibration" })).toBeVisible();
+  await expect(page.getByRole("searchbox", { name: "외부 검색어" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "외부 데이터 검색" })).toHaveCount(0);
+  await expect(page.getByText("미검증 후보")).toHaveCount(0);
   await expectNoHorizontalOverflow(page);
 });
 

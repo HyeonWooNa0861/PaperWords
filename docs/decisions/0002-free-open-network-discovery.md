@@ -1,7 +1,10 @@
 # ADR 0002: Free, source-separated open-network discovery
 
-- Status: accepted
+- Status: superseded by ADR 0003
 - Date: 2026-08-12
+- Superseded: 2026-08-13
+
+This document is retained as historical context. Its network-discovery decision is no longer active and must not be used as implementation guidance.
 
 ## Context
 

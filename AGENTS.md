@@ -12,6 +12,10 @@
 - Claude may only be used as a bounded read-only advisor under `CLAUDE.md`.
 - Do not use credentials, paid services, external scholarly APIs, commit, push, deploy, or publish without new explicit user authority.
 - Runtime, build, and default tests must not require network access or API keys.
+- Dictionary search, Today recommendations, topic browsing, and paper relationships must use only versioned local content.
+- Do not add runtime external terminology or scholarly-data lookup routes, adapters, or candidate results.
+- Keep DOI and source URLs as passive user-opened citations; the app must not fetch them to expand or alter the corpus.
+- Any future personal dataset layer requires a separate local-storage, validation, provenance, and trust-boundary decision before implementation.
 
 ## Implementation Rules
 

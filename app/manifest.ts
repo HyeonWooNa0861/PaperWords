@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "PaperWords",
     short_name: "PaperWords",
-    description: "Korean-first AI paper terminology dictionary.",
+    description: "Korean-first AI paper terminology dictionary powered by verified local content.",
     start_url: "/",
     scope: "/",
     display: "standalone",

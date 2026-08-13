@@ -17,4 +17,4 @@ Use Next.js App Router with local Zod-validated content, MiniSearch candidate re
 - jsdom is pinned to 26.1.0 because 27.0.1 failed Vitest startup through a CommonJS-to-ESM transitive import in the CSS parser stack under the active runtime.
 - Content validation and search evaluation become release-critical gates.
 - Service-worker cache behavior remains explicitly owned and must be covered by later Playwright stale-cache tests.
-- OpenAlex and Crossref remain optional tooling-only adapters and cannot become runtime/build/test prerequisites.
+- External terminology and scholarly-data adapters are excluded from runtime, build, and test paths; ADR 0003 later makes the local-only boundary explicit.

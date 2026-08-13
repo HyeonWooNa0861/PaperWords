@@ -1,6 +1,6 @@
 # Test Plan
 
-Default tests are deterministic and network-independent. External discovery adapters use mocked `fetch` responses in unit, route, component, and browser tests; only a separate production smoke check contacts live CSO and Crossref endpoints.
+All tests are deterministic and network-independent. The app has no external terminology or scholarly-data lookup adapter, and verification never contacts a live dataset service.
 
 ## Bootstrap Gate
 
@@ -54,19 +54,18 @@ Standalone browser scripts run a production build first, then start `next start`
 - Search tests cover English, Korean, acronym, punctuation, Unicode normalization, no-result, malformed, and oversized queries.
 - Schedule unit tests prove Asia/Seoul date resolution around the KST day boundary, the immutable `2026-08-11` to `2026-11-08` 90-day range, and the 20-day no-repeat window.
 - Today route/component tests prove before-range and after-range fallback copy and stable preview selection.
-- Browser core tests cover desktop and mobile route flows without external requests: Today, dictionary search, term detail, topics, topic detail, relation-only paper detail, offline fallback, keyboard order, and no horizontal overflow.
+- The architecture test keeps the retired discovery routes, component, and adapter files absent and prevents dictionary/search code from adding a runtime `fetch` or `/api/` handoff.
+- Browser core tests cover desktop and mobile route flows without external requests: Today, local-only dictionary search, removed discovery endpoints returning `404`, term detail, topics, topic detail, relation-only paper detail, offline fallback, keyboard order, and no horizontal overflow.
 - PWA tests prove installability, strict `/sw.js` version-file failures, offline fallback, waiting-worker update, stale-cache cleanup, no broad runtime caching, and exclusion of non-GET, `/api`, metadata routes, `/sw.js`, and cross-origin requests.
 - Accessibility tests run axe against desktop and mobile routes and block release on critical or serious violations. They also cover keyboard-safe forms, live regions, language spans, and install controls.
 - SEO tests prove deterministic metadata, manifest, icon, robots, sitemap, published-only JSON-LD, no abstract body exposure, and no draft leakage.
 - JSON-LD unit coverage proves malicious script delimiters are escaped before serialization.
-- Discovery tests prove query limits, CSO payload parsing and focus ranking, seven-day/one-hour cache settings, Crossref field selection without abstracts, DOI gating and reserved-character encoding, per-item malformed-metadata isolation, 429 `Retry-After`, timeout and malformed-envelope mapping, the no-request rollback switch, explicit user activation, partial-source failure, and separate `external-unverified` rendering.
-- Browser discovery coverage fulfills same-origin API calls with deterministic fixtures, so the release gate never consumes a live public API quota.
 
 ## PWA and SEO Test Configuration
 
 - Browser tests use the selected Playwright port from `PAPERWORDS_PLAYWRIGHT_PORT`, defaulting to `4311`. `build:browser`, Playwright `baseURL`, and SEO expected URLs all use `http://127.0.0.1:<selected-port>` so canonical, Open Graph, Twitter, robots, sitemap, and JSON-LD URLs stay deterministic locally.
 - Only `test:pwa:run` sets `PAPERWORDS_PWA_VERSION_FILE=output/playwright/pwa-version.json`; the real `/sw.js` route reads that file at request time to prove same-origin version A/B stale-cache behavior without a second build. Non-PWA browser suites leave the variable unset and use deterministic default service-worker versions.
-- Playwright blocks non-localhost HTTP(S) requests at the browser context level. External source links can exist as inert citations, but tests do not fetch them.
+- Playwright blocks non-localhost HTTP(S) requests at the browser context level. Citation links can exist as inert references, but tests and app search do not fetch them.
 - Chromium tests default to the installed Chrome channel through `PAPERWORDS_PLAYWRIGHT_CHANNEL=chrome`; set the variable to another local Chromium channel only when that browser is already installed.
 
 ## Interrupted Browser Run Recovery

@@ -27,8 +27,8 @@ export function AppShell({ children }: Readonly<{ children: ReactNode }>) {
         <div className="site-footer__inner">
           <p className="site-footer__brand" lang="en">PaperWords</p>
           <p>
-            사전 본문은 로컬 검증 콘텐츠만 사용합니다. 외부 탐색 후보는 분리 표시하며 논문 초록은 저장하거나
-            재게시하지 않습니다.
+            검색과 오늘의 단어는 버전 관리된 로컬 검증 콘텐츠만 사용합니다. 출처 링크는 수동 참조이며,
+            앱은 외부 데이터를 검색하거나 논문 초록을 저장·재게시하지 않습니다.
           </p>
         </div>
       </footer>
