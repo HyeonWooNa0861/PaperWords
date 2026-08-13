@@ -14,9 +14,9 @@ test-results/
 output/
 .playwright-cli/
 
-# local orchestration runtime state
-.omx/state/
-.omx/tmux-hook.json
+# local orchestration and internal handoff records
+.omx/
+docs/RELEASE_HANDOFF.md
 
 # deployment provider state
 .vercel/
